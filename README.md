@@ -1,63 +1,61 @@
-11ÔÂ9ºÅ´ÓgitÖĞ¸üĞÂºó±àÒëµÄ64Î»GVIM£¬Ö§³ÖPython3.2¡¢Python2.7¡¢Perl¡¢TCL/TCÓ¦¸ÃËãÊÇÍ¦È«µÄÁË£¬²¹¶¡µÄµ½353¡£
+11æœˆ9å·ä»gitä¸­æ›´æ–°åç¼–è¯‘çš„64ä½GVIMï¼Œæ”¯æŒPython3.2ã€Python2.7ã€Perlã€TCL/TCåº”è¯¥ç®—æ˜¯æŒºå…¨çš„äº†ï¼Œè¡¥ä¸çš„åˆ°353ã€‚
 
-ĞŞ¸ÄÁËÒ»ĞĞÔ´Âë£¬ÓÃÓÚ½â¾öGVIM°×±ßµÄÎÊÌâ£¬ÒòÎªÎÒÊ¹ÓÃµÄÅäÉ«Îªmolokai£¬ËùÒÔ¸øµÄÑÕÉ«ÊÇºÚÉ«µÄ¡£
+ä¿®æ”¹äº†ä¸€è¡Œæºç ï¼Œç”¨äºè§£å†³GVIMç™½è¾¹çš„é—®é¢˜ï¼Œå› ä¸ºæˆ‘ä½¿ç”¨çš„é…è‰²ä¸ºmolokaiï¼Œæ‰€ä»¥ç»™çš„é¢œè‰²æ˜¯é»‘è‰²çš„ã€‚
 
-ĞŞ¸Ä gui_w32.c  µÚ 1471 ĞĞ.
+ä¿®æ”¹ gui_w32.c  ç¬¬ 1471 è¡Œ.
     wndclassw.hbrBackground = CreateSolidBrush(RGB(27, 29, 30));
 
-±àÂëÊ±bigvim.batÖĞµÄÄÚÈİ
+ç¼–ç æ—¶bigvim.batä¸­çš„å†…å®¹
     nmake -f Make_mvc.mak GUI=yes OLE=yes PERL=C:\Perl64 DYNAMIC_PERL=yes PERL_VER=514 PYTHON=C:\Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=C:\Python32 DYNAMIC_PYTHON3=yes PYTHON3_VER=32  TCL=c:\tcl TCL_VER=85 DYNAMIC_TCL=yes %1 IME=yes CSCOPE=yes
 
-vim73Ä¿Â¼»¹·ÅÖÃÁË¼¸¸ödllÎÄ¼ş
+vim73ç›®å½•è¿˜æ”¾ç½®äº†å‡ ä¸ªdllæ–‡ä»¶
 
-  - gvimext.dllÊÇĞŞ¸Ä¹ıºóµÄ£¬¹¦ÄÜ¼ò»¯ÁË£¬µ±Ñ¡Ôñµ¥¸öÎÄ¼şÊ±ÓÒ¼ü²Ëµ¥Ö»»á³öÏÖÒ»¸ö "Edit with VIM"£¬µ±Ñ¡Ôñ¶à¸öÎÄ¼şÍ¬Ê±»á¶à³ö¸ö"Diff with VIM"£¬Í¬Ê±¼ÓÈëÁËÍ¼±ê¡£
-  - gvimfullscreen.dllÊÇ¸öÏàµ±È«µÄ¶«Î÷£¬ÄÜÈÃVIMÈ«ÆÁ¡¢Í¸Ã÷¡¢×ÜÔÚ×îÇ°¹¦ÄÜ£¬ÔÚvimrcÖĞÉèÖÃÈçÏÂÔò¿ÉÊ¹ÓÃ
+  - gvimext.dllæ˜¯ä¿®æ”¹è¿‡åçš„ï¼ŒåŠŸèƒ½ç®€åŒ–äº†ï¼Œå½“é€‰æ‹©å•ä¸ªæ–‡ä»¶æ—¶å³é”®èœå•åªä¼šå‡ºç°ä¸€ä¸ª "Edit with VIM"ï¼Œå½“é€‰æ‹©å¤šä¸ªæ–‡ä»¶åŒæ—¶ä¼šå¤šå‡ºä¸ª"Diff with VIM"ï¼ŒåŒæ—¶åŠ å…¥äº†å›¾æ ‡ã€‚
+  - gvimfullscreen.dllæ˜¯ä¸ªç›¸å½“å…¨çš„ä¸œè¥¿ï¼Œèƒ½è®©VIMå…¨å±ã€é€æ˜ã€æ€»åœ¨æœ€å‰åŠŸèƒ½ï¼Œåœ¨vimrcä¸­è®¾ç½®å¦‚ä¸‹åˆ™å¯ä½¿ç”¨
 
-  	" {{{ WinÆ½Ì¨ÏÂ´°¿ÚÈ«ÆÁ×é¼ş gvimfullscreen.dll
-  	" Alt + Enter È«ÆÁÇĞ»»
-  	" Shift + t ½µµÍ´°¿ÚÍ¸Ã÷¶È
-  	" Shift + y ¼Ó´ó´°¿ÚÍ¸Ã÷¶È
-  	" Shift + r ÇĞ»»VimÊÇ·ñ×ÜÔÚ×îÇ°ÃæÏÔÊ¾
-  	if has('gui_running') && has('gui_win32') && has('libcall')
-  		let g:MyVimLib = 'gvimfullscreen.dll'
-  		function! ToggleFullScreen()
-  			"let s:IsFullScreen = libcallnr("gvimfullscreen.dll", 'ToggleFullScreen', 0)
-  			"let s:IsFullScreen = libcallnr("gvimfullscreen.dll", 'ToggleFullScreen', 27 + 29*256 + 30*256*256)
-  			call libcall(g:MyVimLib, 'ToggleFullScreen', 27 + 29*256 + 30*256*256)
-  		endfunction
-  		"Ó³Éä Alt+Enter ÇĞ»»È«ÆÁvim
-  		map <a-enter> <esc>:call ToggleFullScreen()<cr>
-  		"VimÆô¶¯µÄÊ±ºò×Ô¶¯µ÷ÓÃInitVim ÒÔÈ¥³ıVimµÄ°×É«±ß¿ò
-  		autocmd GUIEnter * call libcallnr(g:MyVimLib, 'InitVim', 0)
-  
-  		let g:VimAlpha = 240
-  		function! SetAlpha(alpha)
-  			let g:VimAlpha = g:VimAlpha + a:alpha
-  			if g:VimAlpha < 180
-  				let g:VimAlpha = 180
-  			endif
-  			if g:VimAlpha > 255
-  				let g:VimAlpha = 255
-  			endif
-  			call libcall(g:MyVimLib, 'SetAlpha', g:VimAlpha)
-  		endfunction
-  		"Ôö¼ÓVim´°ÌåµÄ²»Í¸Ã÷¶È
-  		nmap <s-t> <esc>:call SetAlpha(10)<cr>
-  		"Ôö¼ÓVim´°ÌåµÄÍ¸Ã÷¶È
-  		nmap <s-y> <esc>:call SetAlpha(-10)<cr>
-  
-  		let g:VimTopMost = 0
-  		function! SwitchVimTopMostMode()
-  			if g:VimTopMost == 0
-  				let g:VimTopMost = 1
-  			else
-  				let g:VimTopMost = 0
-  			endif
-  			call libcall(g:MyVimLib, 'EnableTopMost', g:VimTopMost)
-  		endfunction
-  		"ÇĞ»»VimÊÇ·ñÔÚ×îÇ°ÃæÏÔÊ¾
-  		nmap <s-r> <esc>:call SwitchVimTopMostMode()<cr>
-  	endif
-  	" }}}
-
-
+	" {{{ Winå¹³å°ä¸‹çª—å£å…¨å±ç»„ä»¶ gvimfullscreen.dll
+	" Alt + Enter å…¨å±åˆ‡æ¢
+	" Shift + t é™ä½çª—å£é€æ˜åº¦
+	" Shift + y åŠ å¤§çª—å£é€æ˜åº¦
+	" Shift + r åˆ‡æ¢Vimæ˜¯å¦æ€»åœ¨æœ€å‰é¢æ˜¾ç¤º
+	if has('gui_running') && has('gui_win32') && has('libcall')
+		let g:MyVimLib = 'gvimfullscreen.dll'
+		function! ToggleFullScreen()
+			"let s:IsFullScreen = libcallnr("gvimfullscreen.dll", 'ToggleFullScreen', 0)
+			"let s:IsFullScreen = libcallnr("gvimfullscreen.dll", 'ToggleFullScreen', 27 + 29*256 + 30*256*256)
+			call libcall(g:MyVimLib, 'ToggleFullScreen', 27 + 29*256 + 30*256*256)
+		endfunction
+		"æ˜ å°„ Alt+Enter åˆ‡æ¢å…¨å±vim
+		map <a-enter> <esc>:call ToggleFullScreen()<cr>
+		"Vimå¯åŠ¨çš„æ—¶å€™è‡ªåŠ¨è°ƒç”¨InitVim ä»¥å»é™¤Vimçš„ç™½è‰²è¾¹æ¡†
+		autocmd GUIEnter * call libcallnr(g:MyVimLib, 'InitVim', 0)
+	
+		let g:VimAlpha = 240
+		function! SetAlpha(alpha)
+			let g:VimAlpha = g:VimAlpha + a:alpha
+			if g:VimAlpha < 180
+				let g:VimAlpha = 180
+			endif
+			if g:VimAlpha > 255
+				let g:VimAlpha = 255
+			endif
+			call libcall(g:MyVimLib, 'SetAlpha', g:VimAlpha)
+		endfunction
+		"å¢åŠ Vimçª—ä½“çš„ä¸é€æ˜åº¦
+		nmap <s-t> <esc>:call SetAlpha(10)<cr>
+		"å¢åŠ Vimçª—ä½“çš„é€æ˜åº¦
+		nmap <s-y> <esc>:call SetAlpha(-10)<cr>
+	
+		let g:VimTopMost = 0
+		function! SwitchVimTopMostMode()
+			if g:VimTopMost == 0
+				let g:VimTopMost = 1
+			else
+				let g:VimTopMost = 0
+			endif
+			call libcall(g:MyVimLib, 'EnableTopMost', g:VimTopMost)
+		endfunction
+		"åˆ‡æ¢Vimæ˜¯å¦åœ¨æœ€å‰é¢æ˜¾ç¤º
+		nmap <s-r> <esc>:call SwitchVimTopMostMode()<cr>
+	endif
+	" }}}
