@@ -1,0 +1,11 @@
+<asx version="3.0">
+    <param name="AllowShuffle" value="yes" />
+    <title>${FileName}</title>
+
+    <entry>
+        <title>${cursor}</title>
+        <ref href="" />
+        <banner href="" />
+        <moreinfo href="" />
+    </entry>
+</asx>

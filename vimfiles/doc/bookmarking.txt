@@ -1,0 +1,99 @@
+*bookmarking.txt* A bookmaking facility to Vim for marking points of interest
+
+BOOKMARKING                                                     *bookmarking*
+
+A bookmaking facility to Vim for marking points of interest.
+
+Author: David Terei
+Version: 2.1
+Last Change: Wed Jul 6 2010
+
+==============================================================================
+1. CONTENTS                                            *bookmarking-contents*
+
+    1. Contents..................................: |bookmarking-contents|
+    2. Description...............................: |bookmarking-description|
+    3. Using.....................................: |bookmarking-using|
+    4. Commands..................................: |bookmarking-commands|
+       4.1 ToggleBookmark........................: |ToggleBookmark|
+       4.1 NextBookmark..........................: |NextBookmark|
+       4.1 PreviousBookmark......................: |PreviousBookmark|
+    5. Settings..................................: |bookmarking-settings|
+    6. History...................................: |bookmarking-history|
+
+==============================================================================
+2. DESCRIPTION                                      *bookmarking-description*
+
+Add a book marking feature to Vim that allows lines of interest to be marked.
+While similar to marks, you don't need to assign a bookmark to a mark key,
+instead an infinite number of bookmarks can be created and then jumped
+through in sequential order (by line number) with no strain on your memory.
+This is great to use when you are browsing through some source code for the
+first time and need to mark out places of interest to learn how it works.
+
+==============================================================================
+3. USING                                                  *bookmarking-using*
+
+The bookmark facility provides a number of new commands as well as a default
+mapping of these commands to keys. This mapping can be customised as can the
+bookmarks appearance.
+
+Bookmarks can be created using the |ToggleBookmark| command. This will place a
+bookmark at the current location in the file, which should be visually
+visible. You can then jump around the bookmarks in a file by using the
+|NextBookmark| and |PreviousBookmark| commands.
+
+==============================================================================
+4. COMMANDS                                            *bookmarking-commands*
+
+Bookmark provides the following new commands for Vim:
+
+4.1 ToggleBookmark                                           *ToggleBookmark*
+	Toggle a bookmark at the current line.
+
+4.2 NextBookmark                                               *NextBookmark*
+	Jump to the next bookmark in the file that is after your 
+	current location.
+
+4.3 PreviousBookmark                                       *PreviousBookmark*
+	Jump to the previous bookmark in the file that is after your current
+	location.
+
+==============================================================================
+5. SETTINGS                                            *bookmarking-settings*
+
+The keyboard mapping of the commands can be easily changed by adding new
+mappings to them in your |vimrc|. If a mapping is defined in your |vimrc|
+then the default mappings won't be added.
+
+You can also alter the appearance of the bookmark itself. The bookmark is
+shown on the screen using Vim's |:sign| feature. To define the sign used for a
+bookmark yourself, include a sign definition in your |vimrc| for a sign
+called 'bookmark'.
+
+For example, put in your |vimrc|:
+>
+    map <silent> bb :ToggleBookmark<CR>
+    map <silent> bn :NextBookmark<CR>
+    map <silent> bp :PreviousBookmark<CR>
+
+    define bookmark text=>>
+<
+
+==============================================================================
+6. HISTORY                                              *bookmarking-history*
+
+   2.1: Wed Jul 6, 2010:
+	- Fixed bug where the script only worked for files with a '.' in
+	  their names.
+
+   2.0: Wed Jul 6, 2010:
+	- Huge amount of bugs fixed, previous version was pretty broken.
+	- Added new ClearBookmarks command, to clear all bookmarks.
+
+   1.0: Fri Mar 19, 2010:
+	- Initial release.
+
+==============================================================================
+
+vim:tw=78:ts=8:noet:ft=help:fo+=t:norl:noet:
