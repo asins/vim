@@ -49,9 +49,6 @@ if has("gui")
   cnoremap <m-space> <c-c>:simalt ~<cr>
 endif
 
-" 设定doc文档目录
-let helptags=$VIMFILES."/doc"
-set helplang=cn
 "set nobomb
 
 set termencoding=chinese
@@ -265,6 +262,9 @@ let g:bundle_dir = $VIMFILES.'/bundle'
 " let Vundle manage Vundle
 " required! 
 Bundle 'gmarik/vundle'
+
+" Docs
+Bundle 'asins/vimcdoc'
 
 " Color
 Bundle 'asins/molokai'
@@ -546,5 +546,9 @@ set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
 "启动时不显示 捐赠提示
 set shortmess=atl
 set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
+
+" 设定doc文档目录
+let helptags=$VIMFILES."/doc"
+set helplang=cn
 " }}}
 
