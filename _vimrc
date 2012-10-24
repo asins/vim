@@ -354,6 +354,8 @@ Bundle 'html5.vim'
 Bundle 'JavaScript-syntax'
 Bundle 'python.vim--Vasiliev'
 Bundle 'xml.vim'
+Bundle 'Markdown'
+Bundle "lepture/vim-css"
 
 " Indent
 Bundle 'IndentAnything'
@@ -368,8 +370,21 @@ Bundle 'gg/python.vim'
 	" }}}
 
 Bundle 'L9'
-Bundle 'vimux'
-"Bundle 'tpope/vim-fugitive'
+
+"Bundle 'vimux'
+
+	"{{{ tpope/vim-fugitive Git命令集合
+	Bundle 'tpope/vim-fugitive'
+	if executable('git')
+		nnoremap <silent> <leader>gs :Gstatus<CR>
+		nnoremap <silent> <leader>gd :Gdiff<CR>
+		nnoremap <silent> <leader>gc :Gcommit<CR>
+		nnoremap <silent> <leader>gb :Gblame<CR>
+		nnoremap <silent> <leader>gl :Glog<CR>
+		nnoremap <silent> <leader>gp :Git push<CR>
+	endif
+	"}}}
+
 "Bundle 'FencView.vim'
 "Bundle 'hallettj/jslint.vim'
 
@@ -494,8 +509,8 @@ Bundle 'vimux'
 	  \ 'file': '\.exe$\|\.so$\|\.dll$',
 	  \ 'link': 'some_bad_symbolic_links',
 	  \ }
-	let g:ctrlp_working_path_mode=0
-	let g:ctrlp_clear_cache_on_exit=0
+	let g:ctrlp_working_path_mode=1
+	"let g:ctrlp_clear_cache_on_exit=0
 	let g:ctrlp_cache_dir=$VIMFILES.'/_ctrlp'
 	let g:ctrlp_extensions=['tag', 'buffertag', 'quickfix', 'dir', 'rtscript']
 	nmap <a-p> :CtrlP D:/htdocs/tudou.com/<cr>
