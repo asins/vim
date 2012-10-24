@@ -1,9 +1,9 @@
 " {{{
 " DesCRiption: 适合自己使用的vimrc文件，for Linux/Windows, GUI/Console
-" Last Change: 2012-03-30
+" Last Change: 2012-10-24
 " Author:      Asins - asinsimple AT gmail DOT com
 "              Get latest vimrc from http://nootn.com/lab/vim
-" Version:     2.9.3
+" Version:     3.0
 "}}}
 
 " 设置leader为,
