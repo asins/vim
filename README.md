@@ -1,11 +1,15 @@
-11月9号从git中更新后编译的64位GVIM，支持Python3.2、Python2.7、Perl、TCL/TC应该算是挺全的了，补丁的到353。
+**Update 2012-10-24**：插件管理交给`Vundle`管理了，其中我也改动了几个插件也放在Git中。更新插件时直接`:BundleInstall`就可以了（但修改完后得重启GVIM再执行命令），不用的插件在`_vimrc`中删除后执行`:BundleClean`就可以了。
 
-修改了一行源码，用于解决GVIM白边的问题，因为我使用的配色为molokai，所以给的颜色是黑色的。
+**Update 2011-11-09**：从git中更新后编译的64位GVIM，支持Python3.2、Python2.7、Perl、TCL/TC应该算是挺全的了，补丁的到353。
+
+修改了一行源码，用于解决GVIM白边的问题，因为我使用的配色为`molokai`，所以给的颜色是黑色的。
 
 修改 gui_w32.c  第 1471 行.
+
     wndclassw.hbrBackground = CreateSolidBrush(RGB(27, 29, 30));
 
 编码时bigvim.bat中的内容
+
     nmake -f Make_mvc.mak GUI=yes OLE=yes PERL=C:\Perl64 DYNAMIC_PERL=yes PERL_VER=514 PYTHON=C:\Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=C:\Python32 DYNAMIC_PYTHON3=yes PYTHON3_VER=32  TCL=c:\tcl TCL_VER=85 DYNAMIC_TCL=yes %1 IME=yes CSCOPE=yes
 
 vim73目录还放置了几个dll文件
@@ -13,7 +17,7 @@ vim73目录还放置了几个dll文件
   - gvimext.dll是修改过后的，功能简化了，当选择单个文件时右键菜单只会出现一个 "Edit with VIM"，当选择多个文件同时会多出个"Diff with VIM"，同时加入了图标。
   - gvimfullscreen.dll是个相当全的东西，能让VIM全屏、透明、总在最前功能，在vimrc中设置如下则可使用
 
-		" {{{ Win平台下窗口全屏组件 gvimfullscreen.dll
+    	" {{{ Win平台下窗口全屏组件 gvimfullscreen.dll
 		" Alt + Enter 全屏切换
 		" Shift + t 降低窗口透明度
 		" Shift + y 加大窗口透明度
@@ -59,3 +63,4 @@ vim73目录还放置了几个dll文件
 			nmap <s-r> <esc>:call SwitchVimTopMostMode()<cr>
 		endif
 		" }}}
+
