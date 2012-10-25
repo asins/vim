@@ -312,15 +312,19 @@ Bundle 'L9'
 	Bundle 'bufexplorer.zip'
 	" \be 全屏方式查看全部打开的文件列表
 	" \bv 左右方式查看   \bs 上下方式查看
+	noremap <silent> <c-q> :BufExplorer<CR>
+	noremap <silent> <s-q> :BufExplorerHorizontalSplit<CR>
+	noremap <silent> <a-q> :BufExplorerVerticalSplit<CR>
+	
 
-	" 只显示本 tab 内打开的 buffer
-	let g:bufExplorerShowTabBuffer=1
-	" 分割出来的新窗口在当前窗口之下。
-	let g:bufExplorerSplitBelow=1
-	" 按扩展名排序
-	let g:bufExplorerSortBy='extension'
-	" 不显示缺省的帮助信息
-	let g:bufExplorerDefaultHelp=0
+	let g:bufExplorerDefaultHelp=0      " 不显示默认帮助信息
+	let g:bufExplorerShowRelativePath=1 " 显示相对路径
+	let g:bufExplorerSortBy='mru'       " 使用最近使用的排列方式
+	let g:bufExplorerSplitRight=0       " 居左分割
+	let g:bufExplorerSplitVertical=1    " 垂直分割
+	let g:bufExplorerSplitVertSize = 30 " Split width
+	let g:bufExplorerUseCurrentWindow=1 " 在新窗口中打开
+	autocmd BufWinEnter \[Buf\ List\] setl nonumber
 	" }}}
 
 	" {{{ svncommand.vim SVN操作
