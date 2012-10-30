@@ -10,6 +10,79 @@
 let mapleader=","
 let g:mapleader=","
 
+" {{{ 全局设置
+" 关闭 vi 兼容模式
+set nocompatible
+" 自动语法高亮
+syntax on
+" 检测文件类型
+filetype on
+" 检测文件类型插件
+filetype plugin on
+" 不设定在插入状态无法用退格键和 Delete 键删除回车符
+set backspace=indent,eol,start
+set whichwrap+=<,>,h,l
+" 显示行号
+set number
+" 上下可视行数
+set scrolloff=6
+" 设定 tab 长度为 4
+set tabstop=4
+" 设置按BackSpace的时候可以一次删除掉4个空格
+set softtabstop=4
+" 设定 << 和 >> 命令移动时的宽度为 4
+set shiftwidth=4
+set smarttab
+set history=1024
+" 不突出显示当前行
+set nocursorline
+" 覆盖文件时不备份
+set nobackup
+" 自动切换当前目录为当前文件所在的目录
+set autochdir
+" 搜索时忽略大小写，但在有一个或以上大写字母时仍大小写敏感
+set ignorecase
+set smartcase
+" 搜索到文件两端时不重新搜索
+set nowrapscan
+" 实时搜索
+set incsearch
+" 搜索时高亮显示被找到的文本
+set hlsearch
+" 关闭错误声音
+set noerrorbells
+set novisualbell
+set t_vb=
+
+"How many tenths of a second to blink
+set mat=2
+" 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
+set hidden
+" 智能自动缩进
+set smartindent
+" 设定命令行的行数为 1
+set cmdheight=1
+" 显示状态栏 (默认值为 1, 无法显示状态栏)
+set laststatus=2
+"显示括号配对情况
+set showmatch
+
+" 解决自动换行格式下, 如高度在折行之后超过窗口高度结果这一行看不到的问题
+set display=lastline
+" 设置在状态行显示的信息
+set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %c:%l/%L%)
+" 显示Tab符
+set list
+set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+"启动时不显示 捐赠提示
+set shortmess=atl
+set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
+
+" 设定doc文档目录
+let helptags=$VIMFILES."/doc"
+set helplang=cn
+" }}}
+
 " Alt-W切换自动换行
 noremap <a-w> :exe &wrap==1 ? 'set nowrap' : 'set wrap'<cr>
 
@@ -97,7 +170,7 @@ function! GetImportFile()
 		let prefpath = prefpath . 'js\'
 	endif
 	let fullfilepath = substitute(prefpath . filepath, '/', '\', 'g')
-	execute ":tabe " fullfilepath
+	execute ":e " fullfilepath
 	if findfile(filename, fnamemodify(fullfilepath, ':p:h')) == ""
 		echo 'File not exist, Create now: '. fullfilepath
 	endif
@@ -130,6 +203,7 @@ set foldexpr=1
 set foldlevel=0
 " 设置折叠区域的宽度
 set foldcolumn=0
+set switchbuf=usetab,newtab
 " 新建的文件，刚打开的文件不折叠
 autocmd! BufNewFile,BufRead * setlocal nofoldenable
 " }}}
@@ -268,10 +342,12 @@ Bundle 'asins/vimcdoc'
 
 " Color
 Bundle 'asins/molokai'
+" 设定配色方案
+colorscheme molokai
 
 " Syntax
 Bundle 'html5.vim'
-Bundle 'JavaScript-syntax'
+Bundle 'alampros/vim-javascript-syntax'
 Bundle 'python.vim--Vasiliev'
 Bundle 'xml.vim'
 Bundle 'Markdown'
@@ -293,6 +369,11 @@ Bundle 'L9'
 
 "Bundle 'vimux'
 
+	" {{{ asins/template.vim 文件模板
+	Bundle 'asins/template.vim'
+	let g:template_author = "Asins"
+	" }}}
+
 	"{{{ tpope/vim-fugitive Git命令集合
 	Bundle 'tpope/vim-fugitive'
 	if executable('git')
@@ -313,10 +394,9 @@ Bundle 'L9'
 	" \be 全屏方式查看全部打开的文件列表
 	" \bv 左右方式查看   \bs 上下方式查看
 	noremap <silent> <c-q> :BufExplorer<CR>
-	noremap <silent> <s-q> :BufExplorerHorizontalSplit<CR>
-	noremap <silent> <a-q> :BufExplorerVerticalSplit<CR>
+	noremap <silent> <a-q> :BufExplorerHorizontalSplit<CR>
+	noremap <silent> <s-q> :BufExplorerVerticalSplit<CR>
 	
-
 	let g:bufExplorerDefaultHelp=0      " 不显示默认帮助信息
 	let g:bufExplorerShowRelativePath=1 " 显示相对路径
 	let g:bufExplorerSortBy='mru'       " 使用最近使用的排列方式
@@ -345,8 +425,6 @@ Bundle 'L9'
 	let NERDTreeShowBookmarks=1
 	" 是否默认显示文件
 	let NERDTreeShowFiles=1
-	" 是否默认显示隐藏文件
-	let NERDTreeShowHidden=1
 	" 是否默认显示行号
 	let NERDTreeShowLineNumbers=0
 	" 窗口位置（'left' or 'right'）
@@ -471,88 +549,6 @@ Bundle 'L9'
 	" 你可以在高亮文本上使用“,#”或“,*”来上下搜索高亮文本。在使用了“,#”或“,*”后，就可以直接输入“#”或“*”来继续查找该高亮文本，直到你又用“#”或“*”查找了其它文本。
 	" <silent>* 当前MarkWord的下一个     <silent># 当前MarkWord的上一个
 	" <silent>/ 所有MarkWords的下一个    <silent>? 所有MarkWords的上一个
-	"- default highlightings ------------------------------------------------------
-	highlight def MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
-	highlight def MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
-	highlight def MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
-	highlight def MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
-	highlight def MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
-	highlight def MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
 	"}}}
-" }}}
-
-" {{{ 全局设置
-" 关闭 vi 兼容模式
-set nocompatible
-" 自动语法高亮
-syntax on
-" 检测文件类型
-filetype on
-" 检测文件类型插件
-filetype plugin on
-" 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set backspace=indent,eol,start
-set whichwrap+=<,>,h,l
-" 显示行号
-set number
-" 上下可视行数
-set scrolloff=6
-" 设定 tab 长度为 4
-set tabstop=4
-" 设置按BackSpace的时候可以一次删除掉4个空格
-set softtabstop=4
-" 设定 << 和 >> 命令移动时的宽度为 4
-set shiftwidth=4
-set smarttab
-set history=1024
-" 不突出显示当前行
-set nocursorline
-" 覆盖文件时不备份
-set nobackup
-" 自动切换当前目录为当前文件所在的目录
-set autochdir
-" 搜索时忽略大小写，但在有一个或以上大写字母时仍大小写敏感
-set ignorecase
-set smartcase
-" 搜索到文件两端时不重新搜索
-set nowrapscan
-" 实时搜索
-set incsearch
-" 搜索时高亮显示被找到的文本
-set hlsearch
-" 关闭错误声音
-set noerrorbells
-set novisualbell
-set t_vb=
-
-"How many tenths of a second to blink
-set mat=2
-" 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set hidden
-" 智能自动缩进
-set smartindent
-" 设定命令行的行数为 1
-set cmdheight=1
-" 显示状态栏 (默认值为 1, 无法显示状态栏)
-set laststatus=2
-"显示括号配对情况
-set showmatch
-
-" 解决自动换行格式下, 如高度在折行之后超过窗口高度结果这一行看不到的问题
-set display=lastline
-" 设定配色方案
-colorscheme molokai
-" 设置在状态行显示的信息
-set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %c:%l/%L%)
-" 显示Tab符
-set list
-set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
-"启动时不显示 捐赠提示
-set shortmess=atl
-set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
-
-" 设定doc文档目录
-let helptags=$VIMFILES."/doc"
-set helplang=cn
 " }}}
 
