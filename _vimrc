@@ -484,8 +484,12 @@ Bundle 'L9'
 	" Ctrl + n 向前切换
 	" }}}
 
-	" {{{ css_color.vim 颜色显示插件
-	Bundle 'css_color.vim'
+	" {{{ colorizer 颜色显示插件
+	Bundle 'colorizer'
+	" <leader>tc 切换高亮
+	" :ColorHighlight  - start/update highlighting
+	" :ColorClear      - clear all highlights
+	" :ColorToggle     - toggle highlights
 	" }}}
 
 	" {{{ asins/jsbeautify 优化js代码，并不是简单的缩进，而是整个优化
