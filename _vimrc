@@ -9,6 +9,7 @@
 " 设置leader为,
 let mapleader=","
 let g:mapleader=","
+let maplocalleader=","
 
 " {{{ 全局设置
 " 关闭 vi 兼容模式
@@ -204,48 +205,47 @@ set foldlevel=0
 " 设置折叠区域的宽度
 set foldcolumn=0
 set switchbuf=usetab,newtab
-" 新建的文件，刚打开的文件不折叠
-autocmd! BufNewFile,BufRead * setlocal nofoldenable
+" 自动运用设置
+autocmd! bufwritepost _vimrc silent source $VIM/_vimrc
 " }}}
 
-augroup Filetype Specific " {{{
-	autocmd!
-	" VimFiles {{{
-	autocmd Filetype vim noremap <buffer> <F1> <Esc>:help <C-r><C-w><CR>
-	" }}}
-	" Arch Linux {{{
-	autocmd BufNewFile,BufRead PKGBUILD setl syntax=sh ft=sh
-	autocmd BufNewFile,BufRead *.install setl syntax=sh ft=sh
-	" }}}
-	" dict {{{
-	autocmd filetype javascript set dictionary=$VIMFILES/dict/javascript.dic
-	autocmd filetype css set dictionary=$VIMFILES/dict/css.dic
-	autocmd filetype php set dictionary=$VIMFILES/dict/php.dic
-	" }}}
-	" HTML {{{
-	autocmd FileType html,xhtml setlocal smartindent foldmethod=indent
-	" }}}
-	" CSS {{{
-	autocmd FileType css setlocal smartindent foldmethod=indent
-	autocmd FileType css setlocal noexpandtab tabstop=2 shiftwidth=2
-	autocmd BufNewFile,BufRead *.scss setl ft=scss
-	" 删除一条CSS中无用空格
-	autocmd filetype css vnoremap <leader>co J:s/\s*\([{:;,]\)\s*/\1/g<CR>:let @/=''<cr>
-	autocmd filetype css nnoremap <leader>co :s/\s*\([{:;,]\)\s*/\1/g<CR>:let @/=''<cr>
-	" }}}
-	" Javascript {{{
-	autocmd BufRead,BufNewFile jquery.*.js setlocal ft=javascript syntax=jquery
-	" JSON syntax
-	autocmd BufRead,BufNewFile *.json setlocal ft=json
-	" }}}
 
-	" PHP Twig 模板引擎语法
-	autocmd BufRead,BufNewFile *.twig set syntax=twig
 
-	" Python 文件的一般设置，比如不要 tab 等
-	"autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
+" VimFiles {{{
+autocmd Filetype vim noremap <buffer> <F1> <Esc>:help <C-r><C-w><CR>
+" }}}
+" Arch Linux {{{
+autocmd BufNewFile,BufRead PKGBUILD setl syntax=sh ft=sh
+autocmd BufNewFile,BufRead *.install setl syntax=sh ft=sh
+" }}}
+" dict {{{
+autocmd filetype javascript set dictionary+=$VIMFILES/dict/javascript.dic
+autocmd filetype css set dictionary+=$VIMFILES/dict/css.dic
+autocmd filetype php set dictionary+=$VIMFILES/dict/php.dic
+" }}}
+" HTML {{{
+autocmd FileType html,xhtml setlocal smartindent foldmethod=indent
+" }}}
+" CSS {{{
+autocmd FileType css setlocal smartindent foldmethod=indent
+autocmd FileType css setlocal noexpandtab tabstop=2 shiftwidth=2
+autocmd BufNewFile,BufRead *.scss setl ft=scss
+" 删除一条CSS中无用空格
+autocmd filetype css vnoremap <leader>co J:s/\s*\([{:;,]\)\s*/\1/g<CR>:let @/=''<cr>
+autocmd filetype css nnoremap <leader>co :s/\s*\([{:;,]\)\s*/\1/g<CR>:let @/=''<cr>
+" }}}
+" Javascript {{{
+autocmd BufRead,BufNewFile jquery.*.js setlocal ft=javascript syntax=jquery
+" JSON syntax
+autocmd BufRead,BufNewFile *.json setlocal ft=json
+" }}}
 
-augroup END " }}}
+" PHP Twig 模板引擎语法
+autocmd BufRead,BufNewFile *.twig set syntax=twig
+
+" Python 文件的一般设置，比如不要 tab 等
+"autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
+
 
 " {{{全文搜索选中的文字
 vnoremap <silent> <leader>f y/<c-r>=escape(@", "\\/.*$^~[]")<cr><cr>
@@ -305,27 +305,50 @@ if has('gui_running') && has('gui_win32') && has('libcall')
 endif
 " }}}
 
-" {{{
-"function <SID>OpenSpecial(ochar,cchar)
-	"let line = getline('.')
-	"let col = col('.') - 2
-	"call setline('.',line[:(col)].a:cchar.line[(col+1):])
-	"return a:ochar."\<esc>a\<CR>;\<CR>".a:cchar."\<esc>\"_xk$\"_xa"
-"endfunction
-"inoremap <silent> { <C-R>=<SID>OpenSpecial('{','}')<CR>
+" {{{ 回车时前字符为{时自动换行补全
+function! <SID>OpenSpecial(ochar,cchar)
+	let line = getline('.')
+	let col = col('.') - 2
+	if(line[col] != a:ochar)
+		return "\<esc>a\<CR>"
+	endif
+	call setline('.',line[:(col)].a:cchar.line[(col+1):])
+	return "\<esc>a\<CR>;\<CR>".a:cchar."\<esc>\"_xk$\"_xa"
+endfunction
+inoremap <silent> <CR> <C-R>=<SID>OpenSpecial('{','}')<CR>
 " }}}
+
+"function! AutoSpace()
+	"let line = getline('.')
+	"if line[col('.') - 2] == '{' && line[col('.') - 1] == '}'
+		"return "\<space>\<space>\<left>"
+	"else
+		"return "\<space>"
+	"endif
+"endfunction
+
+"" 大括号折行判断
+"function! StructStart()
+	"let ccol = col('.')
+	"let line = getline('.')
+	"if line[ccol - 2] == '{' && line[ccol - 1] == '}'
+		"return 1
+	"else
+		"return 0
+	"endif
+"endfunction
+
+
 
 " {{{ Fast edit hosts file
 function! FlushDNS()
 	python import sys
 	exe 'python sys.argv = ["ipconfig /flushdns"]'
-	exe 'pyf '.g:svn_cmd_path
 endfunction
-:nmap <silent> <Leader>host :tabnew c:\windows\system32\drivers\etc\hosts<CR>
-:nmap <silent> <Leader>dns :!ipconfig /flushdns<CR>
+nmap <silent> <Leader>host :tabnew c:\windows\system32\drivers\etc\hosts<CR>
+nmap <silent> <Leader>dns :!ipconfig /flushdns<CR>
 "autocmd! bufwritepost hosts call FlushDNS()
 " }}}
-
 
 " {{{ plugin for vundle
 " more script see: http://vim-scripts.org/vim/scripts.html
@@ -359,13 +382,16 @@ Bundle 'Javascript-Indentation'
 Bundle 'gg/python.vim'
 
 " Plugin
-
-	" {{{ AutoClose 符号自动配对补全
-	Bundle 'AutoClose'
-	" <leader>a " 功能开/关
+	" {{{ svn.vim--McCoy svn操作
+	Bundle 'svn.vim--McCoy'
+	"<Leader><LocalLeader>c  - Calls :Svn commit
+	"<Leader><LocalLeader>C  - Calls :Svn complete
+	"<Leader><LocalLeader>u  - Calls :Svn update
+	"<Leader><LocalLeader>l  - Calls :Svn log
+	"<Leader><LocalLeader>a  - Calls :Svn add
 	" }}}
 
-Bundle 'L9'
+"Bundle 'L9'
 
 "Bundle 'vimux'
 
@@ -405,10 +431,6 @@ Bundle 'L9'
 	let g:bufExplorerSplitVertSize = 30 " Split width
 	let g:bufExplorerUseCurrentWindow=1 " 在新窗口中打开
 	autocmd BufWinEnter \[Buf\ List\] setl nonumber
-	" }}}
-
-	" {{{ svncommand.vim SVN操作
-	Bundle 'svncommand.vim'
 	" }}}
 
 	" {{{ The-NERD-tree 文件管理器
@@ -553,6 +575,11 @@ Bundle 'L9'
 	" 你可以在高亮文本上使用“,#”或“,*”来上下搜索高亮文本。在使用了“,#”或“,*”后，就可以直接输入“#”或“*”来继续查找该高亮文本，直到你又用“#”或“*”查找了其它文本。
 	" <silent>* 当前MarkWord的下一个     <silent># 当前MarkWord的上一个
 	" <silent>/ 所有MarkWords的下一个    <silent>? 所有MarkWords的上一个
+	hi MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
+	hi MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
+	hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
+	hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
+	hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
+	hi MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
 	"}}}
 " }}}
-
