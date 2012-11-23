@@ -218,11 +218,6 @@ autocmd Filetype vim noremap <buffer> <F1> <Esc>:help <C-r><C-w><CR>
 autocmd BufNewFile,BufRead PKGBUILD setl syntax=sh ft=sh
 autocmd BufNewFile,BufRead *.install setl syntax=sh ft=sh
 " }}}
-" dict {{{
-autocmd filetype javascript set dictionary+=$VIMFILES/dict/javascript.dic
-autocmd filetype css set dictionary+=$VIMFILES/dict/css.dic
-autocmd filetype php set dictionary+=$VIMFILES/dict/php.dic
-" }}}
 " HTML {{{
 autocmd FileType html,xhtml setlocal smartindent foldmethod=indent
 " }}}
@@ -318,28 +313,6 @@ endfunction
 inoremap <silent> <CR> <C-R>=<SID>OpenSpecial('{','}')<CR>
 " }}}
 
-"function! AutoSpace()
-	"let line = getline('.')
-	"if line[col('.') - 2] == '{' && line[col('.') - 1] == '}'
-		"return "\<space>\<space>\<left>"
-	"else
-		"return "\<space>"
-	"endif
-"endfunction
-
-"" 大括号折行判断
-"function! StructStart()
-	"let ccol = col('.')
-	"let line = getline('.')
-	"if line[ccol - 2] == '{' && line[ccol - 1] == '}'
-		"return 1
-	"else
-		"return 0
-	"endif
-"endfunction
-
-
-
 " {{{ Fast edit hosts file
 function! FlushDNS()
 	python import sys
@@ -363,6 +336,15 @@ Bundle 'gmarik/vundle'
 " Docs
 Bundle 'asins/vimcdoc'
 
+" dict {{{
+Bundle 'asins/vim-dict'
+"<ctrl-x>_<ctrl-k> 打开提示
+autocmd filetype javascript set dictionary+=$VIMFILES/dict/javascript.dic
+autocmd filetype javascript set dictionary+=$VIMFILES/dict/node.dic
+autocmd filetype css set dictionary+=$VIMFILES/dict/css.dic
+autocmd filetype php set dictionary+=$VIMFILES/dict/php.dic
+" }}}
+
 " Color
 Bundle 'asins/molokai'
 " 设定配色方案
@@ -383,12 +365,21 @@ Bundle 'gg/python.vim'
 
 " Plugin
 	" {{{ svn.vim--McCoy svn操作
-	Bundle 'svn.vim--McCoy'
+	"Bundle 'svn.vim--McCoy'
 	"<Leader><LocalLeader>c  - Calls :Svn commit
 	"<Leader><LocalLeader>C  - Calls :Svn complete
 	"<Leader><LocalLeader>u  - Calls :Svn update
 	"<Leader><LocalLeader>l  - Calls :Svn log
 	"<Leader><LocalLeader>a  - Calls :Svn add
+	" }}}
+
+"Bundle 'jamescarr/snipmate-nodejs'
+
+	" Omnifunc {{{
+	" <c-x>_<c-o> 打开提示
+	Bundle 'teramako/jscomplete-vim'
+	autocmd FileType javascript setl omnifunc=jscomplete#CompleteJS
+	let g:jscomplete_use = ['dom', 'moz', 'es6th']
 	" }}}
 
 "Bundle 'L9'
@@ -414,6 +405,13 @@ Bundle 'gg/python.vim'
 
 "Bundle 'FencView.vim'
 "Bundle 'hallettj/jslint.vim'
+
+	" {{{ rst表格支持 需要python支持
+	Bundle 'yangzetian/RST-Tables'
+	",,c  ->  创建新的rst表格
+    ",,f  ->  更新当前表格
+	" }}}
+
 
 	" {{{ bufexplorer.vim Buffers切换
 	Bundle 'bufexplorer.zip'
