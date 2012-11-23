@@ -305,9 +305,17 @@ function! <SID>OpenSpecial(ochar,cchar)
 	let line = getline('.')
 	let col = col('.') - 2
 	if(line[col] != a:ochar)
-		return "\<esc>a\<CR>"
+		if(col > 0)
+			return "\<esc>a\<CR>"
+		else
+			return "\<CR>"
+		endif
 	endif
-	call setline('.',line[:(col)].a:cchar.line[(col+1):])
+	if(line[col+1] != a:cchar)
+		call setline('.',line[:(col)].a:cchar.line[(col+1):])
+	else
+		call setline('.',line[:(col)].line[(col+1):])
+	endif
 	return "\<esc>a\<CR>;\<CR>".a:cchar."\<esc>\"_xk$\"_xa"
 endfunction
 inoremap <silent> <CR> <C-R>=<SID>OpenSpecial('{','}')<CR>
@@ -339,10 +347,10 @@ Bundle 'asins/vimcdoc'
 " dict {{{
 Bundle 'asins/vim-dict'
 "<ctrl-x>_<ctrl-k> 打开提示
-autocmd filetype javascript set dictionary+=$VIMFILES/dict/javascript.dic
-autocmd filetype javascript set dictionary+=$VIMFILES/dict/node.dic
-autocmd filetype css set dictionary+=$VIMFILES/dict/css.dic
-autocmd filetype php set dictionary+=$VIMFILES/dict/php.dic
+autocmd filetype javascript set dictionary+=$VIMFILES/bundle/vim-dict/dict/javascript.dic
+autocmd filetype javascript set dictionary+=$VIMFILES/bundle/vim-dict/dict/node.dic
+autocmd filetype css set dictionary+=$VIMFILES/bundle/vim-dict/dict/css.dic
+autocmd filetype php set dictionary+=$VIMFILES/bundle/vim-dict/dict/php.dic
 " }}}
 
 " Color
