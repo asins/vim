@@ -205,6 +205,8 @@ set foldlevel=0
 " 设置折叠区域的宽度
 set foldcolumn=0
 set switchbuf=usetab,newtab
+" 新建的文件，刚打开的文件不折叠
+autocmd! BufNewFile,BufRead * setlocal nofoldenable
 " 自动运用设置
 autocmd! bufwritepost _vimrc silent source $VIM/_vimrc
 " }}}
@@ -327,7 +329,7 @@ function! FlushDNS()
 	exe 'python sys.argv = ["ipconfig /flushdns"]'
 endfunction
 nmap <silent> <Leader>host :tabnew c:\windows\system32\drivers\etc\hosts<CR>
-nmap <silent> <Leader>dns :!ipconfig /flushdns<CR>
+nmap <silent> <Leader>dns :!ipconfig /flushdns<CR><space>
 "autocmd! bufwritepost hosts call FlushDNS()
 " }}}
 
@@ -365,6 +367,12 @@ Bundle 'python.vim--Vasiliev'
 Bundle 'xml.vim'
 Bundle 'Markdown'
 Bundle "lepture/vim-css"
+	" {{{
+	Bundle "groenewege/vim-less"
+	au BufNewFile,BufRead *.less setf less
+	autocmd BufWritePost *_src.less
+	\ execute '!node d:\Code\less\bin\lessc -x --include-path=D:\htdocs\tudou.com\static\skin\ % > %:t:r.css'
+	" }}}
 
 " Indent
 Bundle 'IndentAnything'
@@ -532,12 +540,15 @@ Bundle 'gg/python.vim'
 	" :Ren 开始重命名
 	"}}}
 	
-	" {{{ dterei/VimBookmarking 设置标记（标签）
-	Bundle 'dterei/VimBookmarking'
-	" <f9> 设置标记    <f4> 向下跳转标记   <s-f4> 向上跳转标记
-	map <f9>   :ToggleBookmark<cr>
-	map <f4>   :NextBookmark<cr>
-	map <s-f4> :PreviousBookmark<cr>
+	" {{{ mikeage/ShowMarks 设置标记（标签）
+	Bundle 'mikeage/ShowMarks'
+	let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	let showmarks_ignore_type = "hqm"
+	" m{mark} 设置标记  '{mark} 移动到标记
+	"<Leader>mt   - 打开/关闭ShowMarks插件
+	"<Leader>mh   - 清除当前行的标记
+	"<Leader>ma   - 清除当前缓冲区中所有的标记
+	"<Leader>mm   - 在当前行打一个标记，使用下一个可用的标记名
 	"}}}
 	
 	" {{{ ctrlp.vim 文件搜索
