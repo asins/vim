@@ -1,15 +1,28 @@
 " {{{
 " DesCRiption: 适合自己使用的vimrc文件，for Linux/Windows, GUI/Console
-" Last Change: 2012-10-24
+" Last Change: 2013-01-23
 " Author:      Asins - asinsimple AT gmail DOT com
 "              Get latest vimrc from http://nootn.com/lab/vim
-" Version:     3.0
+" Version:     3.2
 "}}}
 
 " 设置leader为,
 let mapleader=","
 let g:mapleader=","
 let maplocalleader=","
+" 关闭 vi 兼容模式
+set nocompatible
+
+"编辑vim配置文件
+if has("unix")
+    set fileformats=unix,dos,mac
+    nmap <leader>e :tabnew $HOME/.vimrc<cr>
+	let $VIMFILES = $HOME."/.vim"
+else
+    set fileformats=dos,unix,mac
+    nmap <leader>e :tabnew $VIM/_vimrc<cr>
+	let $VIMFILES = $VIM."/vimfiles"
+endif
 
 " {{{ 全局设置
 " 关闭 vi 兼容模式
@@ -61,17 +74,9 @@ set mat=2
 set hidden
 " 智能自动缩进
 set smartindent
-" 设定命令行的行数为 1
-set cmdheight=1
-" 显示状态栏 (默认值为 1, 无法显示状态栏)
-set laststatus=2
 "显示括号配对情况
 set showmatch
 
-" 解决自动换行格式下, 如高度在折行之后超过窗口高度结果这一行看不到的问题
-set display=lastline
-" 设置在状态行显示的信息
-set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %c:%l/%L%)
 " 显示Tab符
 set list
 set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
@@ -83,6 +88,300 @@ set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slas
 let helptags=$VIMFILES."/doc"
 set helplang=cn
 " }}}
+
+" {{{ plugin for vundle
+" more script see: http://vim-scripts.org/vim/scripts.html
+set rtp+=$VIMFILES/bundle/vundle/
+call vundle#rc()
+let g:bundle_dir = $VIMFILES.'/bundle'
+
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+" Docs
+Bundle 'asins/vimcdoc'
+
+" dict {{{
+Bundle 'asins/vim-dict'
+"<ctrl-x>_<ctrl-k> 打开提示
+autocmd filetype javascript setlocal dictionary+=$VIMFILES/bundle/vim-dict/dict/javascript.dic
+autocmd filetype javascript setlocal dictionary+=$VIMFILES/bundle/vim-dict/dict/node.dic
+autocmd filetype css setlocal dictionary+=$VIMFILES/bundle/vim-dict/dict/css.dic
+autocmd filetype php setlocal dictionary+=$VIMFILES/bundle/vim-dict/dict/php.dic
+" }}}
+
+" Color
+Bundle 'asins/vim-colors'
+Bundle 'tpope/vim-vividchalk'
+Bundle 'chriskempson/vim-tomorrow-theme'
+" 设定配色方案
+colorscheme molokai
+
+" Syntax
+Bundle 'othree/html5.vim'
+Bundle 'nono/jquery.vim'
+Bundle 'pangloss/vim-javascript'
+Bundle 'python.vim--Vasiliev'
+Bundle 'xml.vim'
+Bundle 'tpope/vim-markdown'
+Bundle "lepture/vim-css"
+
+" Code Completins
+" {{{ plugin/neocomplcache.vim 自动提示插件
+Bundle 'Shougo/neocomplcache'
+let g:neosnippet#snippets_directory=$VIMFILES.'/bundle/neosnippet/autoload/neosnippet/snippets'
+Bundle "Shougo/neosnippet"
+let g:neocomplcache_enable_at_startup=1
+let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
+let g:neocomplcache_enable_smart_case=1
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+set completeopt-=preview
+imap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+imap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+smap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+"启用自动代码提示
+nmap <Leader>ne :NeoComplCacheToggle<CR>
+
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+	\ 'default' : '',
+	\ 'css' : $VIMFILES.'/dict/css.dic',
+	\ 'php' : $VIMFILES.'/dict/php.dic',
+	\ 'javascript' : $VIMFILES.'/dict/javascript.dic'
+	\ }
+" }}}
+" {{{ ZenCoding.vim 很酷的插件，HTML代码生成
+Bundle 'ZenCoding.vim'
+" 插件最新版：http://github.com/mattn/zencoding-vim
+" 常用命令可看：http://nootn.com/blog/Tool/23/
+" https://raw.github.com/mattn/zencoding-vim/master/TUTORIAL
+let g:user_zen_settings = {
+	\ 'lang': "zh-cn"
+	\ }
+" <c-y>m  合并多行
+" }}}
+" snipmate dependencies
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'tomtom/tlib_vim'
+
+	" {{{
+	Bundle "groenewege/vim-less"
+	au BufNewFile,BufRead *.less setf less
+	autocmd BufWritePost *_src.less
+	\ execute '!node d:\Code\less\bin\lessc -x --include-path=D:\htdocs\tudou.com\static\skin\ % > %:t:r.css'
+	" }}}
+
+" Indent
+Bundle 'IndentAnything'
+Bundle 'Javascript-Indentation'
+Bundle 'gg/python.vim'
+
+" Plugin
+	" {{{ svn.vim--McCoy svn操作
+	"Bundle 'svn.vim--McCoy'
+	"<Leader><LocalLeader>c  - Calls :Svn commit
+	"<Leader><LocalLeader>C  - Calls :Svn complete
+	"<Leader><LocalLeader>u  - Calls :Svn update
+	"<Leader><LocalLeader>l  - Calls :Svn log
+	"<Leader><LocalLeader>a  - Calls :Svn add
+	" }}}
+"Bundle 'jamescarr/snipmate-nodejs'
+
+	" Omnifunc {{{
+	" <c-x>_<c-o> 打开提示
+	Bundle 'teramako/jscomplete-vim'
+	autocmd FileType javascript setl omnifunc=jscomplete#CompleteJS
+	let g:jscomplete_use = ['dom', 'moz', 'es6th']
+	" }}}
+
+"Bundle 'L9'
+
+"Bundle 'vimux'
+
+	" {{{ asins/template.vim 文件模板
+	Bundle 'asins/template.vim'
+	let g:template_author = "Asins"
+	" }}}
+
+	"{{{ tpope/vim-fugitive Git命令集合
+	Bundle 'tpope/vim-fugitive'
+	if executable('git')
+		nnoremap <silent> <leader>gs :Gstatus<CR>
+		nnoremap <silent> <leader>gd :Gdiff<CR>
+		nnoremap <silent> <leader>gc :Gcommit<CR>
+		nnoremap <silent> <leader>gb :Gblame<CR>
+		nnoremap <silent> <leader>gl :Glog<CR>
+		nnoremap <silent> <leader>gp :Git push<CR>
+	endif
+	"}}}
+
+"Bundle 'FencView.vim'
+"Bundle 'hallettj/jslint.vim'
+
+	" {{{ bufexplorer.vim Buffers切换
+	Bundle 'bufexplorer.zip'
+	" \be 全屏方式查看全部打开的文件列表
+	" \bv 左右方式查看   \bs 上下方式查看
+	noremap <silent> <c-q> :BufExplorer<CR>
+	noremap <silent> <a-q> :BufExplorerHorizontalSplit<CR>
+	noremap <silent> <s-q> :BufExplorerVerticalSplit<CR>
+	
+	let g:bufExplorerDefaultHelp=0      " 不显示默认帮助信息
+	let g:bufExplorerShowRelativePath=1 " 显示相对路径
+	let g:bufExplorerSortBy='mru'       " 使用最近使用的排列方式
+	let g:bufExplorerSplitRight=0       " 居左分割
+	let g:bufExplorerSplitVertical=1    " 垂直分割
+	let g:bufExplorerSplitVertSize = 30 " Split width
+	let g:bufExplorerUseCurrentWindow=1 " 在新窗口中打开
+	autocmd BufWinEnter \[Buf\ List\] setl nonumber
+	" }}}
+
+	" {{{ The-NERD-tree 文件管理器
+	Bundle 'The-NERD-tree'
+	" 让Tree把自己给装饰得多姿多彩漂亮点
+	let NERDChristmasTree=1
+	" 控制当光标移动超过一定距离时，是否自动将焦点调整到屏中心
+	let NERDTreeAutoCenter=1
+	" 指定书签文件
+	let NERDTreeBookmarksFile=$VIMFILES.'\NERDTree_bookmarks'
+	" 指定鼠标模式(1.双击打开 2.单目录双文件 3.单击打开)
+	let NERDTreeMouseMode=2
+	" 是否默认显示书签列表
+	let NERDTreeShowBookmarks=1
+	" 是否默认显示文件
+	let NERDTreeShowFiles=1
+	" 是否默认显示行号
+	let NERDTreeShowLineNumbers=0
+	" 窗口位置（'left' or 'right'）
+	let NERDTreeWinPos='left'
+	" 窗口宽度
+	let NERDTreeWinSize=31
+	nnoremap <Leader>tt :NERDTree<CR>
+	"}}}
+
+	" {{{ The-NERD-Commenter 注释代码用的，以下映射已写在插件中
+	Bundle 'The-NERD-Commenter'
+	" <leader>ca 在可选的注释方式之间切换，比如C/C++ 的块注释/* */和行注释//
+	" <leader>cc 注释当前行
+	" <leader>cs 以”性感”的方式注释
+	" <leader>cA 在当前行尾添加注释符，并进入Insert模式
+	" <leader>cu 取消注释
+	" <leader>cm 添加块注释
+	" }}}
+
+	" {{{ auto_mkdir 自动创建目录
+	Bundle 'auto_mkdir'
+	" }}}
+
+	" {{{ mru.vim 记录最近打开的文件
+	Bundle 'mru.vim'
+	let MRU_File = $VIMFILES."/_vim_mru_files"
+	let MRU_Max_Entries = 500
+	let MRU_Add_Menu = 0
+	nmap <leader>f :MRU<cr>
+	" }}}
+
+	" {{{ majutsushi/tagbar 代码导航
+	Bundle 'majutsushi/tagbar'
+	if has("unix")
+		let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
+	else
+		let g:tagbar_ctags_bin = $VIMFILES.'/ctags.exe'
+	endif
+	let g:tagbar_autofocus = 1
+	nmap <leader>tl :TagbarToggle<CR>
+	" }}}
+
+	" {{{ CmdlineComplete 命令行模式下自动补全
+	Bundle 'CmdlineComplete'
+	" Ctrl + p 向后切换
+	" Ctrl + n 向前切换
+	" }}}
+
+	" {{{ colorizer 颜色显示插件
+	Bundle 'colorizer'
+	" <leader>tc 切换高亮
+	" :ColorHighlight  - start/update highlighting
+	" :ColorClear      - clear all highlights
+	" :ColorToggle     - toggle highlights
+	" }}}
+
+	" {{{ asins/jsbeautify 优化js代码，并不是简单的缩进，而是整个优化
+	Bundle 'asins/jsbeautify'
+	" 开始优化整个文件
+	nmap <silent> <leader>js :call g:Jsbeautify()<cr>
+	" }}}
+
+	" {{{ asins/renamer.vim 文件重命名
+	Bundle 'asins/renamer.vim'
+	" :Renamer 将当前文件所在文件夹下的内容显示在一个新窗口
+	" :Ren 开始重命名
+	"}}}
+	
+	" {{{ mikeage/ShowMarks 设置标记（标签）
+	Bundle 'mikeage/ShowMarks'
+	let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	let g:showmarks_ignore_type = "hqm"
+	" m{mark} 设置标记  '{mark} 移动到标记
+	"<Leader>mt   - 打开/关闭ShowMarks插件
+	"<Leader>mh   - 清除当前行的标记
+	"<Leader>ma   - 清除当前缓冲区中所有的标记
+	"<Leader>mm   - 在当前行打一个标记，使用下一个可用的标记名
+	"}}}
+	
+	" {{{ ctrlp.vim 文件搜索
+	Bundle 'ctrlp.vim'
+	"set wildignore+=*/tmp/*,*.so,*.swp,*.zip  " MacOSX/Linux
+	set wildignore+=tmp\*,*.swp,*.zip,*.exe   " Windows
+	let g:ctrlp_custom_ignore = {
+	  \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+	  \ 'file': '\.exe$\|\.so$\|\.dll$',
+	  \ 'link': 'some_bad_symbolic_links',
+	  \ }
+	let g:ctrlp_working_path_mode=1
+	"let g:ctrlp_clear_cache_on_exit=0
+	let g:ctrlp_cache_dir=$VIMFILES.'/_ctrlp'
+	let g:ctrlp_extensions=['tag', 'buffertag', 'quickfix', 'dir', 'rtscript']
+	nmap <a-p> :CtrlP D:/htdocs/tudou.com/<cr>
+	"<c-d> 切换完全/只文件名搜索
+	"<c-r> 切换搜索匹配模式：字符串/正则
+	" }}}
+
+	" {{{ matchit.zip 对%命令进行扩展使得能在嵌套标签和语句之间跳转
+	Bundle 'matchit.zip'
+	" % 正向匹配      g% 反向匹配
+	" [% 定位块首     ]% 定位块尾
+	"}}}
+	
+	" {{{ MatchTag HTML标签高亮配对
+	Bundle 'MatchTag'
+	" }}}
+
+	" {{{ Mark 给各种tags标记不同的颜色，便于观看调式的插件。
+	"Bundle 'Mark'
+	" 这样，当我输入“,hl”时，就会把光标下的单词高亮，在此单词上按“,hh”会清除该单词的高亮。如果在高亮单词外输入“,hh”，会清除所有的高亮。
+	" 你也可以使用virsual模式选中一段文本，然后按“,hl”，会高亮你所选中的文本；或者你可以用“,hr”来输入一个正则表达式，这会高亮所有符合这个正则表达式的文本。
+	"nmap <silent> <leader>hl <plug>MarkSet
+	"vmap <silent> <leader>hl <plug>MarkSet
+	"nmap <silent> <leader>hh <plug>MarkClear
+	"vmap <silent> <leader>hh <plug>MarkClear
+	"nmap <silent> <leader>hr <plug>MarkRegex
+	"vmap <silent> <leader>hr <plug>MarkRegex
+	" 你可以在高亮文本上使用“,#”或“,*”来上下搜索高亮文本。在使用了“,#”或“,*”后，就可以直接输入“#”或“*”来继续查找该高亮文本，直到你又用“#”或“*”查找了其它文本。
+	" <silent>* 当前MarkWord的下一个     <silent># 当前MarkWord的上一个
+	" <silent>/ 所有MarkWords的下一个    <silent>? 所有MarkWords的上一个
+	"hi MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
+	"hi MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
+	"hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
+	"hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
+	"hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
+	"hi MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
+	"}}}
+" }}}
+
 
 " Alt-W切换自动换行
 noremap <a-w> :exe &wrap==1 ? 'set nowrap' : 'set wrap'<cr>
@@ -96,26 +395,6 @@ vnoremap <c-c> "+y
 " 普通模式下 Ctrl+c 复制文件路径
 nnoremap <c-c> :let @+ = expand('%:p')<cr>
 
-if has("gui_running")
-	set guioptions-=m " 隐藏菜单栏
-	set guioptions-=T " 隐藏工具栏
-	set guioptions-=L " 隐藏左侧滚动条
-	set guioptions-=r " 隐藏右侧滚动条
-	set guioptions-=b " 隐藏底部滚动条
-	set showtabline=0 " Tab栏
-endif
-
-"编辑vim配置文件
-if has("unix")
-    set fileformats=unix,dos,mac
-    nmap <leader>e :tabnew $HOME/.vimrc<cr>
-	let $VIMFILES = $HOME."/.vim"
-else
-    set fileformats=dos,unix,mac
-    nmap <leader>e :tabnew $VIM/_vimrc<cr>
-	let $VIMFILES = $VIM."/vimfiles"
-endif
-
 " Alt-Space is System menu
 if has("gui")
   noremap <m-space> :simalt ~<cr>
@@ -125,11 +404,28 @@ endif
 
 "set nobomb
 
-set termencoding=chinese
-set fileencodings=ucs-bom,utf-8,cp936,cp950,latin1
-set ambiwidth=double
-set guifont=YaHei\ Mono:h12
-" }}}
+if !exists('g:VimrcIsLoad')
+	set termencoding=chinese
+	set fileencodings=ucs-bom,utf-8,cp936,cp950,latin1
+	set ambiwidth=double
+	set guifont=YaHei\ Mono:h12
+	set linespace=0
+	" 解决自动换行格式下, 如高度在折行之后超过窗口高度结果这一行看不到的问题
+	set display=lastline
+	language messages zh_CN.UTF-8
+	set langmenu=zh_CN.UTF-8
+	source $VIMRUNTIME/delmenu.vim
+	set guioptions-=m " 隐藏菜单栏
+	set guioptions-=T " 隐藏工具栏
+	set guioptions-=L " 隐藏左侧滚动条
+	set guioptions-=r " 隐藏右侧滚动条
+	set guioptions-=b " 隐藏底部滚动条
+	set showtabline=0 " Tab栏
+	" 显示状态栏 (默认值为 1, 无法显示状态栏)
+	set laststatus=2
+	" 设置在状态行显示的信息
+	set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ [%{(&fenc==\"\"?&enc:&fenc).(&bomb?\",BOM\":\"\")}]\ %c:%l/%L%)
+endif
 
 
 " 删除所有行未尾空格
@@ -210,8 +506,6 @@ autocmd! BufNewFile,BufRead * setlocal nofoldenable
 " 自动运用设置
 autocmd! bufwritepost _vimrc silent source $VIM/_vimrc
 " }}}
-
-
 
 " VimFiles {{{
 autocmd Filetype vim noremap <buffer> <F1> <Esc>:help <C-r><C-w><CR>
@@ -333,270 +627,25 @@ nmap <silent> <Leader>dns :!ipconfig /flushdns<CR><space>
 "autocmd! bufwritepost hosts call FlushDNS()
 " }}}
 
-" {{{ plugin for vundle
-" more script see: http://vim-scripts.org/vim/scripts.html
-set rtp+=$VIMFILES/bundle/vundle/
-call vundle#rc()
-let g:bundle_dir = $VIMFILES.'/bundle'
-
-" let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
-
-" Docs
-Bundle 'asins/vimcdoc'
-
-" dict {{{
-Bundle 'asins/vim-dict'
-"<ctrl-x>_<ctrl-k> 打开提示
-autocmd filetype javascript set dictionary+=$VIMFILES/bundle/vim-dict/dict/javascript.dic
-autocmd filetype javascript set dictionary+=$VIMFILES/bundle/vim-dict/dict/node.dic
-autocmd filetype css set dictionary+=$VIMFILES/bundle/vim-dict/dict/css.dic
-autocmd filetype php set dictionary+=$VIMFILES/bundle/vim-dict/dict/php.dic
-" }}}
-
-" Color
-Bundle 'asins/molokai'
-" 设定配色方案
-colorscheme molokai
-
-" Syntax
-Bundle 'html5.vim'
-Bundle 'alampros/vim-javascript-syntax'
-Bundle 'python.vim--Vasiliev'
-Bundle 'xml.vim'
-Bundle 'Markdown'
-Bundle "lepture/vim-css"
-	" {{{
-	Bundle "groenewege/vim-less"
-	au BufNewFile,BufRead *.less setf less
-	autocmd BufWritePost *_src.less
-	\ execute '!node d:\Code\less\bin\lessc -x --include-path=D:\htdocs\tudou.com\static\skin\ % > %:t:r.css'
-	" }}}
-
-" Indent
-Bundle 'IndentAnything'
-Bundle 'Javascript-Indentation'
-Bundle 'gg/python.vim'
-
-" Plugin
-	" {{{ svn.vim--McCoy svn操作
-	"Bundle 'svn.vim--McCoy'
-	"<Leader><LocalLeader>c  - Calls :Svn commit
-	"<Leader><LocalLeader>C  - Calls :Svn complete
-	"<Leader><LocalLeader>u  - Calls :Svn update
-	"<Leader><LocalLeader>l  - Calls :Svn log
-	"<Leader><LocalLeader>a  - Calls :Svn add
-	" }}}
-
-"Bundle 'jamescarr/snipmate-nodejs'
-
-	" Omnifunc {{{
-	" <c-x>_<c-o> 打开提示
-	Bundle 'teramako/jscomplete-vim'
-	autocmd FileType javascript setl omnifunc=jscomplete#CompleteJS
-	let g:jscomplete_use = ['dom', 'moz', 'es6th']
-	" }}}
-
-"Bundle 'L9'
-
-"Bundle 'vimux'
-
-	" {{{ asins/template.vim 文件模板
-	Bundle 'asins/template.vim'
-	let g:template_author = "Asins"
-	" }}}
-
-	"{{{ tpope/vim-fugitive Git命令集合
-	Bundle 'tpope/vim-fugitive'
-	if executable('git')
-		nnoremap <silent> <leader>gs :Gstatus<CR>
-		nnoremap <silent> <leader>gd :Gdiff<CR>
-		nnoremap <silent> <leader>gc :Gcommit<CR>
-		nnoremap <silent> <leader>gb :Gblame<CR>
-		nnoremap <silent> <leader>gl :Glog<CR>
-		nnoremap <silent> <leader>gp :Git push<CR>
+" {{{ NodeJs UglifyJs 压缩/美化/解释
+function! UglifyJs(...)
+	if(expand("%:e") != "js")
+		echo "Not a JS file."
+		return
 	endif
-	"}}}
-
-"Bundle 'FencView.vim'
-"Bundle 'hallettj/jslint.vim'
-
-	" {{{ rst表格支持 需要python支持
-	Bundle 'yangzetian/RST-Tables'
-	",,c  ->  创建新的rst表格
-    ",,f  ->  更新当前表格
-	" }}}
-
-
-	" {{{ bufexplorer.vim Buffers切换
-	Bundle 'bufexplorer.zip'
-	" \be 全屏方式查看全部打开的文件列表
-	" \bv 左右方式查看   \bs 上下方式查看
-	noremap <silent> <c-q> :BufExplorer<CR>
-	noremap <silent> <a-q> :BufExplorerHorizontalSplit<CR>
-	noremap <silent> <s-q> :BufExplorerVerticalSplit<CR>
-	
-	let g:bufExplorerDefaultHelp=0      " 不显示默认帮助信息
-	let g:bufExplorerShowRelativePath=1 " 显示相对路径
-	let g:bufExplorerSortBy='mru'       " 使用最近使用的排列方式
-	let g:bufExplorerSplitRight=0       " 居左分割
-	let g:bufExplorerSplitVertical=1    " 垂直分割
-	let g:bufExplorerSplitVertSize = 30 " Split width
-	let g:bufExplorerUseCurrentWindow=1 " 在新窗口中打开
-	autocmd BufWinEnter \[Buf\ List\] setl nonumber
-	" }}}
-
-	" {{{ The-NERD-tree 文件管理器
-	Bundle 'The-NERD-tree'
-	" 让Tree把自己给装饰得多姿多彩漂亮点
-	let NERDChristmasTree=1
-	" 控制当光标移动超过一定距离时，是否自动将焦点调整到屏中心
-	let NERDTreeAutoCenter=1
-	" 指定书签文件
-	let NERDTreeBookmarksFile=$VIMFILES.'\NERDTree_bookmarks'
-	" 指定鼠标模式(1.双击打开 2.单目录双文件 3.单击打开)
-	let NERDTreeMouseMode=2
-	" 是否默认显示书签列表
-	let NERDTreeShowBookmarks=1
-	" 是否默认显示文件
-	let NERDTreeShowFiles=1
-	" 是否默认显示行号
-	let NERDTreeShowLineNumbers=0
-	" 窗口位置（'left' or 'right'）
-	let NERDTreeWinPos='left'
-	" 窗口宽度
-	let NERDTreeWinSize=31
-	nnoremap <Leader>tt :NERDTree<CR>
-	"}}}
-
-	" {{{ The-NERD-Commenter 注释代码用的，以下映射已写在插件中
-	Bundle 'The-NERD-Commenter'
-	" <leader>ca 在可选的注释方式之间切换，比如C/C++ 的块注释/* */和行注释//
-	" <leader>cc 注释当前行
-	" <leader>cs 以”性感”的方式注释
-	" <leader>cA 在当前行尾添加注释符，并进入Insert模式
-	" <leader>cu 取消注释
-	" <leader>cm 添加块注释
-	" }}}
-
-	" {{{ auto_mkdir 自动创建目录
-	Bundle 'auto_mkdir'
-	" }}}
-
-	" {{{ mru.vim 记录最近打开的文件
-	Bundle 'mru.vim'
-	let MRU_File = $VIMFILES."/_vim_mru_files"
-	let MRU_Max_Entries = 500
-	let MRU_Add_Menu = 0
-	nmap <leader>f :MRU<cr>
-	" }}}
-
-	" {{{ majutsushi/tagbar 代码导航
-	Bundle 'majutsushi/tagbar'
-	if has("unix")
-		let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
-	else
-		let g:tagbar_ctags_bin = $VIMFILES.'/ctags.exe'
+	let s:chr = get(a:000, 0, 'min')
+	let s:filePath = expand("%:p")
+	let s:outPath = expand("%:p:r").'-'.s:chr.'.js'
+	if(s:chr == 'min')
+		let s:param = '-c -m'
+	elseif(s:chr == 'b')
+		let s:param = '-c -b'
 	endif
-	let g:tagbar_autofocus = 1
-	nmap <leader>tl :TagbarToggle<CR>
-	" }}}
+	exe '!cmd.exe /s /c pushd & "c:/Program Files/nodejs/node.exe" d:/Code/Uglify-js/bin/uglifyjs "'.s:filePath.'" '.s:param.' -o "'.s:outPath.'"'
+	echo 'output to:'.s:outPath.' success!'
+endfunction
+command! -nargs=* -bar Wjs call UglifyJs(<f-args>)
+"}}}
 
-	" {{{ ZenCoding.vim 很酷的插件，HTML代码生成
-	Bundle 'ZenCoding.vim'
-	" 插件最新版：http://github.com/mattn/zencoding-vim
-	" 常用命令可看：http://nootn.com/blog/Tool/23/
-	" https://raw.github.com/mattn/zencoding-vim/master/TUTORIAL
-	let g:user_zen_settings = {
-	\    'lang': "zh-cn"
-	\}
-	" <c-y>m  合并多行
-	" }}}
 
-	" {{{ CmdlineComplete 命令行模式下自动补全
-	Bundle 'CmdlineComplete'
-	" Ctrl + p 向后切换
-	" Ctrl + n 向前切换
-	" }}}
-
-	" {{{ colorizer 颜色显示插件
-	Bundle 'colorizer'
-	" <leader>tc 切换高亮
-	" :ColorHighlight  - start/update highlighting
-	" :ColorClear      - clear all highlights
-	" :ColorToggle     - toggle highlights
-	" }}}
-
-	" {{{ asins/jsbeautify 优化js代码，并不是简单的缩进，而是整个优化
-	Bundle 'asins/jsbeautify'
-	" 开始优化整个文件
-	nmap <silent> <leader>js :call g:Jsbeautify()<cr>
-	" }}}
-
-	" {{{ asins/renamer.vim 文件重命名
-	Bundle 'asins/renamer.vim'
-	" :Renamer 将当前文件所在文件夹下的内容显示在一个新窗口
-	" :Ren 开始重命名
-	"}}}
-	
-	" {{{ mikeage/ShowMarks 设置标记（标签）
-	Bundle 'mikeage/ShowMarks'
-	let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	let showmarks_ignore_type = "hqm"
-	" m{mark} 设置标记  '{mark} 移动到标记
-	"<Leader>mt   - 打开/关闭ShowMarks插件
-	"<Leader>mh   - 清除当前行的标记
-	"<Leader>ma   - 清除当前缓冲区中所有的标记
-	"<Leader>mm   - 在当前行打一个标记，使用下一个可用的标记名
-	"}}}
-	
-	" {{{ ctrlp.vim 文件搜索
-	Bundle 'ctrlp.vim'
-	"set wildignore+=*/tmp/*,*.so,*.swp,*.zip  " MacOSX/Linux
-	set wildignore+=tmp\*,*.swp,*.zip,*.exe   " Windows
-	let g:ctrlp_custom_ignore = {
-	  \ 'dir':  '\.git$\|\.hg$\|\.svn$',
-	  \ 'file': '\.exe$\|\.so$\|\.dll$',
-	  \ 'link': 'some_bad_symbolic_links',
-	  \ }
-	let g:ctrlp_working_path_mode=1
-	"let g:ctrlp_clear_cache_on_exit=0
-	let g:ctrlp_cache_dir=$VIMFILES.'/_ctrlp'
-	let g:ctrlp_extensions=['tag', 'buffertag', 'quickfix', 'dir', 'rtscript']
-	nmap <a-p> :CtrlP D:/htdocs/tudou.com/<cr>
-	"<c-d> 切换完全/只文件名搜索
-	"<c-r> 切换搜索匹配模式：字符串/正则
-	" }}}
-
-	" {{{ matchit.zip 对%命令进行扩展使得能在嵌套标签和语句之间跳转
-	Bundle 'matchit.zip'
-	" % 正向匹配      g% 反向匹配
-	" [% 定位块首     ]% 定位块尾
-	"}}}
-	
-	" {{{ MatchTag HTML标签高亮配对
-	Bundle 'MatchTag'
-	" }}}
-
-	" {{{ Mark 给各种tags标记不同的颜色，便于观看调式的插件。
-	Bundle 'Mark'
-	" 这样，当我输入“,hl”时，就会把光标下的单词高亮，在此单词上按“,hh”会清除该单词的高亮。如果在高亮单词外输入“,hh”，会清除所有的高亮。
-	" 你也可以使用virsual模式选中一段文本，然后按“,hl”，会高亮你所选中的文本；或者你可以用“,hr”来输入一个正则表达式，这会高亮所有符合这个正则表达式的文本。
-	nmap <silent> <leader>hl <plug>MarkSet
-	vmap <silent> <leader>hl <plug>MarkSet
-	nmap <silent> <leader>hh <plug>MarkClear
-	vmap <silent> <leader>hh <plug>MarkClear
-	nmap <silent> <leader>hr <plug>MarkRegex
-	vmap <silent> <leader>hr <plug>MarkRegex
-	" 你可以在高亮文本上使用“,#”或“,*”来上下搜索高亮文本。在使用了“,#”或“,*”后，就可以直接输入“#”或“*”来继续查找该高亮文本，直到你又用“#”或“*”查找了其它文本。
-	" <silent>* 当前MarkWord的下一个     <silent># 当前MarkWord的上一个
-	" <silent>/ 所有MarkWords的下一个    <silent>? 所有MarkWords的上一个
-	hi MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
-	hi MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
-	hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
-	hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
-	hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
-	hi MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
-	"}}}
-" }}}
+let g:VimrcIsLoad=1 " source时让一些设置不再执行
