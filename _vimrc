@@ -130,21 +130,14 @@ Bundle "lepture/vim-css"
 " Code Completins
 " {{{ plugin/neocomplcache.vim 自动提示插件
 Bundle 'Shougo/neocomplcache'
-let g:neosnippet#snippets_directory=$VIMFILES.'/bundle/neosnippet/autoload/neosnippet/snippets'
-Bundle "Shougo/neosnippet"
 let g:neocomplcache_enable_at_startup=1
-let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
+"let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
 let g:neocomplcache_enable_smart_case=1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 set completeopt-=preview
-imap <C-k> <Plug>(neocomplcache_snippets_force_expand)
-smap <C-k> <Plug>(neocomplcache_snippets_force_expand)
-imap <C-l> <Plug>(neocomplcache_snippets_force_jump)
-smap <C-l> <Plug>(neocomplcache_snippets_force_jump)
 "启用自动代码提示
 nmap <Leader>ne :NeoComplCacheToggle<CR>
-
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
 	\ 'default' : '',
@@ -152,6 +145,20 @@ let g:neocomplcache_dictionary_filetype_lists = {
 	\ 'php' : $VIMFILES.'/dict/php.dic',
 	\ 'javascript' : $VIMFILES.'/dict/javascript.dic'
 	\ }
+
+Bundle "asins/snipmate-snippets"
+Bundle "Shougo/neosnippet"
+let g:neosnippet#snippets_directory=$VIMFILES.'/bundle/snipmate-snippets/snippets'
+" Plugin key-mappings.
+imap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_force_expand)
+imap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+smap <C-l> <Plug>(neocomplcache_snippets_force_jump)
+
+" For snippet_complete marker.
+if has('conceal')
+  set conceallevel=2 concealcursor=i
+endif
 " }}}
 " {{{ ZenCoding.vim 很酷的插件，HTML代码生成
 Bundle 'ZenCoding.vim'
@@ -163,9 +170,6 @@ let g:user_zen_settings = {
 	\ }
 " <c-y>m  合并多行
 " }}}
-" snipmate dependencies
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
 
 	" {{{
 	Bundle "groenewege/vim-less"
@@ -188,7 +192,6 @@ Bundle 'gg/python.vim'
 	"<Leader><LocalLeader>l  - Calls :Svn log
 	"<Leader><LocalLeader>a  - Calls :Svn add
 	" }}}
-"Bundle 'jamescarr/snipmate-nodejs'
 
 	" Omnifunc {{{
 	" <c-x>_<c-o> 打开提示
@@ -361,24 +364,18 @@ Bundle 'gg/python.vim'
 	" }}}
 
 	" {{{ Mark 给各种tags标记不同的颜色，便于观看调式的插件。
-	"Bundle 'Mark'
+	Bundle 'Mark'
 	" 这样，当我输入“,hl”时，就会把光标下的单词高亮，在此单词上按“,hh”会清除该单词的高亮。如果在高亮单词外输入“,hh”，会清除所有的高亮。
 	" 你也可以使用virsual模式选中一段文本，然后按“,hl”，会高亮你所选中的文本；或者你可以用“,hr”来输入一个正则表达式，这会高亮所有符合这个正则表达式的文本。
-	"nmap <silent> <leader>hl <plug>MarkSet
-	"vmap <silent> <leader>hl <plug>MarkSet
-	"nmap <silent> <leader>hh <plug>MarkClear
-	"vmap <silent> <leader>hh <plug>MarkClear
-	"nmap <silent> <leader>hr <plug>MarkRegex
-	"vmap <silent> <leader>hr <plug>MarkRegex
+	nmap <silent> <leader>hl <plug>MarkSet
+	vmap <silent> <leader>hl <plug>MarkSet
+	nmap <silent> <leader>hh <plug>MarkClear
+	vmap <silent> <leader>hh <plug>MarkClear
+	nmap <silent> <leader>hr <plug>MarkRegex
+	vmap <silent> <leader>hr <plug>MarkRegex
 	" 你可以在高亮文本上使用“,#”或“,*”来上下搜索高亮文本。在使用了“,#”或“,*”后，就可以直接输入“#”或“*”来继续查找该高亮文本，直到你又用“#”或“*”查找了其它文本。
 	" <silent>* 当前MarkWord的下一个     <silent># 当前MarkWord的上一个
 	" <silent>/ 所有MarkWords的下一个    <silent>? 所有MarkWords的上一个
-	"hi MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
-	"hi MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
-	"hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
-	"hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
-	"hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
-	"hi MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
 	"}}}
 " }}}
 
