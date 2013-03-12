@@ -161,6 +161,14 @@ if has('conceal')
 endif
 " }}}
 
+" {{{ 代码垂直移动
+Bundle 'vim-scripts/upAndDown'
+vmap <unique> <silent> <m-j> <Plug>upAndDownVisualDown
+vmap <unique> <silent> <m-k> <Plug>upAndDownVisualUp
+
+" }}}
+
+
 " {{{ HTML/XML缩进 ragtag.vim
 Bundle 'tpope/vim-ragtag'
 let g:html_indent_script1 = "zero"
