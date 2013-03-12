@@ -3,7 +3,7 @@
 " Last Change: 2013-01-23
 " Author:      Asins - asinsimple AT gmail DOT com
 "              Get latest vimrc from http://nootn.com/lab/vim
-" Version:     3.2
+" Version:     3.3
 "}}}
 
 " 设置leader为,
@@ -131,7 +131,7 @@ Bundle "lepture/vim-css"
 " {{{ plugin/neocomplcache.vim 自动提示插件
 Bundle 'Shougo/neocomplcache'
 let g:neocomplcache_enable_at_startup=1
-"let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
+let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
 let g:neocomplcache_enable_smart_case=1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
@@ -146,7 +146,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
 	\ 'javascript' : $VIMFILES.'/dict/javascript.dic'
 	\ }
 
-Bundle "asins/snipmate-snippets"
+Bundle "honza/snipmate-snippets"
 Bundle "Shougo/neosnippet"
 let g:neosnippet#snippets_directory=$VIMFILES.'/bundle/snipmate-snippets/snippets'
 " Plugin key-mappings.
@@ -160,9 +160,14 @@ if has('conceal')
   set conceallevel=2 concealcursor=i
 endif
 " }}}
+
+" {{{ HTML/XML缩进 ragtag.vim
+Bundle 'tpope/vim-ragtag'
+let g:html_indent_script1 = "zero"
+let g:html_indent_style1 = "zero"
+" }}}
 " {{{ ZenCoding.vim 很酷的插件，HTML代码生成
 Bundle 'ZenCoding.vim'
-" 插件最新版：http://github.com/mattn/zencoding-vim
 " 常用命令可看：http://nootn.com/blog/Tool/23/
 " https://raw.github.com/mattn/zencoding-vim/master/TUTORIAL
 let g:user_zen_settings = {
@@ -225,11 +230,12 @@ Bundle 'gg/python.vim'
 "Bundle 'hallettj/jslint.vim'
 
 	" {{{ bufexplorer.vim Buffers切换
-	Bundle 'bufexplorer.zip'
+	Bundle 'vim-scripts/bufexplorer.zip'
 	" \be 全屏方式查看全部打开的文件列表
-	" \bv 左右方式查看   \bs 上下方式查看
 	noremap <silent> <c-q> :BufExplorer<CR>
+	" \bs 上下方式查看
 	noremap <silent> <a-q> :BufExplorerHorizontalSplit<CR>
+	" \bv 左右方式查看
 	noremap <silent> <s-q> :BufExplorerVerticalSplit<CR>
 	
 	let g:bufExplorerDefaultHelp=0      " 不显示默认帮助信息
@@ -426,7 +432,15 @@ endif
 
 
 " 删除所有行未尾空格
-nnoremap <f12> :%s/[ \t\r]\+$//g<cr>
+"function! g:mergeLines() range
+  "let lines = join(map(getline(a:firstline, a:lastline), 'matchstr(v:val, "^\\s*\\zs.*\\ze\\s*$")'), '')
+  "let indent = substitute(getline('.'), '^\(\s*\).*', '\1', '')
+  "silent! exe "normal! gvc"
+  "call setline('.', indent . lines)
+"endfunction
+"vnoremap <f12> :call g:mergeLines()<cr>
+nnoremap <silent> <f12> :%s/[ \t\r]\+$//g<cr>
+" :%s/[ \t\r]\+$//g<cr>
 
 " 窗口切换
 nnoremap <c-h> <c-w>h
@@ -453,7 +467,7 @@ nnoremap <leader>2 :set filetype=css<cr>
 nnoremap <leader>3 :set filetype=javascript<cr>
 nnoremap <leader>4 :set filetype=php<cr>
 
-" {{{ 打开项目中的文件
+" {{{ TUDOU 打开项目中的文件
 function! GetImportFile()
 	let prefpath = 'D:\htdocs\tudou.com\static\'
 	let filepath = substitute(getline('.'), '\s*\*\s*@import\s*', '', '')
@@ -524,8 +538,12 @@ autocmd filetype css nnoremap <leader>co :s/\s*\([{:;,]\)\s*/\1/g<CR>:let @/=''<
 " }}}
 " Javascript {{{
 autocmd BufRead,BufNewFile jquery.*.js setlocal ft=javascript syntax=jquery
+autocmd BufRead,BufNewFile *.tpl setlocal ft=tpl syntax=html
 " JSON syntax
 autocmd BufRead,BufNewFile *.json setlocal ft=json
+" }}}
+" Markdown {{{
+autocmd FileType markdown setf expandtab
 " }}}
 
 " PHP Twig 模板引擎语法
