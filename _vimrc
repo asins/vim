@@ -163,8 +163,8 @@ endif
 
 " {{{ 代码垂直移动
 Bundle 'vim-scripts/upAndDown'
-vmap <unique> <silent> <m-j> <Plug>upAndDownVisualDown
-vmap <unique> <silent> <m-k> <Plug>upAndDownVisualUp
+vmap <silent> <a-j> <Plug>upAndDownVisualDown
+vmap <silent> <a-k> <Plug>upAndDownVisualUp
 
 " }}}
 
@@ -393,6 +393,54 @@ Bundle 'gg/python.vim'
 	"}}}
 " }}}
 
+
+" {{{ 查找光标位置的单词并生成结果列表
+function! QuickSearchList(visual, ...)
+	if empty(expand("%"))
+		return 0
+	endif
+	if a:visual
+		let l:saved_reg = @"
+		execute "normal! vgvy"
+		let	l:pattern = escape(@", '\\/.*$^~[]')
+		let l:pattern = substitute(l:pattern, "\n$", "", "")
+		let @" = l:saved_reg
+	else
+		if exists("a:1")
+			let l:pattern = a:1
+		else
+			let l:pattern = expand("<cword>")
+		endif
+	endif
+	execute ":vimgrep /" . l:pattern . "/ %"
+	execute ":copen"
+	let @/ = l:pattern
+endfunction
+
+command! -nargs=+ SearchList call QuickSearchList(0, <f-args>)
+"nmap <leader>lv :lvimgrep /<c-r>=expand("<cword>")<cr>/ %<cr>:lw<cr>
+nmap <silent><F4> :call QuickSearchList(0)<cr>
+vmap <silent><F4> :call QuickSearchList(1)<cr>
+" }}}
+
+" {{{ 开启/关闭Quickfix列表
+function! QuickfixToggle()
+	redir => ls_rst
+		execute ":silent! ls"
+	redir END
+	if match(ls_rst, "[Quickfix ") == -1
+		execute ":copen"
+	else
+		execute ":cclose"
+	endif
+endfunction
+
+map <silent><F7> :call QuickfixToggle()<cr>
+imap <silent><F7> <esc>:call QuickfixToggle()<cr>
+" }}}
+
+autocmd filetype css vnoremap <leader>on J:s/\s*\([{:,;]\)\s*/\1/g<CR>:let @/=''<cr>
+autocmd filetype css nnoremap <leader>on :s/\s*\([{:,;]\)\s*/\1/g<CR>:let @/=''<cr>
 
 " Alt-W切换自动换行
 noremap <a-w> :exe &wrap==1 ? 'set nowrap' : 'set wrap'<cr>
