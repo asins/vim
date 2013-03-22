@@ -127,6 +127,12 @@ Bundle 'xml.vim'
 Bundle 'tpope/vim-markdown'
 Bundle "lepture/vim-css"
 
+"{{{ 对齐代码
+Bundle 'Eivy/Align'
+" 原有,tt冲突
+map <Leader>tT <Plug>AM_tt
+" }}}
+
 " Code Completins
 " {{{ plugin/neocomplcache.vim 自动提示插件
 Bundle 'Shougo/neocomplcache'
