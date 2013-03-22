@@ -163,8 +163,8 @@ endif
 
 " {{{ 代码垂直移动
 Bundle 'vim-scripts/upAndDown'
-vmap <unique> <silent> <m-j> <Plug>upAndDownVisualDown
-vmap <unique> <silent> <m-k> <Plug>upAndDownVisualUp
+vmap <silent> <a-j> <Plug>upAndDownVisualDown
+vmap <silent> <a-k> <Plug>upAndDownVisualUp
 
 " }}}
 
@@ -295,10 +295,10 @@ Bundle 'gg/python.vim'
 
 	" {{{ mru.vim 记录最近打开的文件
 	Bundle 'mru.vim'
-	let MRU_File = $VIMFILES."/_vim_mru_files"
-	let MRU_Max_Entries = 500
+	let MRU_File = $VIM."/_vim_mru_files"
+	let MRU_Max_Entries = 1000
 	let MRU_Add_Menu = 0
-	nmap <leader>f :MRU<cr>
+	nmap <leader>f :MRU 
 	" }}}
 
 	" {{{ majutsushi/tagbar 代码导航
@@ -306,7 +306,7 @@ Bundle 'gg/python.vim'
 	if has("unix")
 		let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
 	else
-		let g:tagbar_ctags_bin = $VIMFILES.'/ctags.exe'
+		let g:tagbar_ctags_bin = $VIM.'/ctags.exe'
 	endif
 	let g:tagbar_autofocus = 1
 	nmap <leader>tl :TagbarToggle<CR>
@@ -360,7 +360,7 @@ Bundle 'gg/python.vim'
 	  \ }
 	let g:ctrlp_working_path_mode=1
 	"let g:ctrlp_clear_cache_on_exit=0
-	let g:ctrlp_cache_dir=$VIMFILES.'/_ctrlp'
+	let g:ctrlp_cache_dir=$VIM.'/_ctrlp'
 	let g:ctrlp_extensions=['tag', 'buffertag', 'quickfix', 'dir', 'rtscript']
 	nmap <a-p> :CtrlP D:/htdocs/tudou.com/<cr>
 	"<c-d> 切换完全/只文件名搜索
@@ -393,6 +393,38 @@ Bundle 'gg/python.vim'
 	"}}}
 " }}}
 
+
+" {{{ 查找光标位置的单词并生成结果列表
+function! QuickSearchList(visual, ...)
+	if empty(expand("%"))
+		return 0
+	endif
+	if a:visual
+		let l:saved_reg = @"
+		execute "normal! vgvy"
+		let	l:pattern = escape(@", '\\/.*$^~[]')
+		let l:pattern = substitute(l:pattern, "\n$", "", "")
+		let @" = l:saved_reg
+	else
+		if exists("a:1")
+			let l:pattern = a:1
+		else
+			let l:pattern = expand("<cword>")
+		endif
+	endif
+	execute ":vimgrep /" . l:pattern . "/ %"
+	execute ":copen"
+	let @/ = l:pattern
+    nnoremap <buffer> <silent> q :close<CR>
+endfunction
+
+command! -nargs=+ SearchList call QuickSearchList(0, <f-args>)
+" 全文搜索选中的文字
+vmap <silent><leader>f :call QuickSearchList(1)<cr>
+" }}}
+
+autocmd filetype css vnoremap <leader>on J:s/\s*\([{:,;]\)\s*/\1/g<CR>:let @/=''<cr>
+autocmd filetype css nnoremap <leader>on :s/\s*\([{:,;]\)\s*/\1/g<CR>:let @/=''<cr>
 
 " Alt-W切换自动换行
 noremap <a-w> :exe &wrap==1 ? 'set nowrap' : 'set wrap'<cr>
@@ -559,12 +591,6 @@ autocmd BufRead,BufNewFile *.twig set syntax=twig
 
 " Python 文件的一般设置，比如不要 tab 等
 "autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
-
-
-" {{{全文搜索选中的文字
-vnoremap <silent> <leader>f y/<c-r>=escape(@", "\\/.*$^~[]")<cr><cr>
-vnoremap <silent> <leader>F y?<c-r>=escape(@", "\\/.*$^~[]")<cr><cr>
-" }}}
 
 " {{{ linux 下非root用户保存
 " cmap w!! w !sudo tee % > /dev/null
