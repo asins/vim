@@ -601,12 +601,11 @@ autocmd BufRead,BufNewFile *.twig set syntax=twig
 " Shift + t 降低窗口透明度
 " Shift + y 加大窗口透明度
 " Shift + r 切换Vim是否总在最前面显示
+" Vim启动的时候自动使用当前颜色的背景色以去除Vim的白色边框
 if has('gui_running') && has('gui_win32') && has('libcall')
     let g:MyVimLib = 'gvimfullscreen.dll'
     function! ToggleFullScreen()
-        "let s:IsFullScreen = libcallnr("gvimfullscreen.dll", 'ToggleFullScreen', 0)
-        "let s:IsFullScreen = libcallnr("gvimfullscreen.dll", 'ToggleFullScreen', 27 + 29*256 + 30*256*256)
-        call libcall(g:MyVimLib, 'ToggleFullScreen', 27 + 29*256 + 30*256*256)
+        call libcall(g:MyVimLib, 'ToggleFullScreen', 1)
     endfunction
 
     let g:VimAlpha = 245
@@ -638,8 +637,6 @@ if has('gui_running') && has('gui_win32') && has('libcall')
     nmap <s-t> <esc>:call SetAlpha(10)<cr>
     "增加Vim窗体的透明度
     nmap <s-y> <esc>:call SetAlpha(-10)<cr>
-    "Vim启动的时候自动调用InitVim 以去除Vim的白色边框
-    autocmd GUIEnter * call libcallnr(g:MyVimLib, 'InitVim', 0)
     " 默认设置透明
     autocmd GUIEnter * call libcallnr(g:MyVimLib, 'SetAlpha', g:VimAlpha)
 endif
