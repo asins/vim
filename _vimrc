@@ -125,7 +125,7 @@ Bundle 'pangloss/vim-javascript'
 Bundle 'python.vim--Vasiliev'
 Bundle 'xml.vim'
 Bundle 'tpope/vim-markdown'
-Bundle "lepture/vim-css"
+Bundle 'asins/vim-css'
 
 "{{{ 对齐代码
 Bundle 'Eivy/Align'
