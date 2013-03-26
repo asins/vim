@@ -1,6 +1,6 @@
 " {{{
 " DesCRiption: 适合自己使用的vimrc文件，for Linux/Windows, GUI/Console
-" Last Change: 2013-03-24
+" Last Change: 2013-03-26
 " Author:      Asins - asinsimple AT gmail DOT com
 "              Get latest vimrc from http://nootn.com/lab/vim
 " Version:     3.4
@@ -126,6 +126,12 @@ Bundle 'python.vim--Vasiliev'
 Bundle 'xml.vim'
 Bundle 'tpope/vim-markdown'
 Bundle 'asins/vim-css'
+
+"{{{ 对齐代码
+Bundle 'Eivy/Align'
+" 原有,tt冲突
+map <Leader>tT <Plug>AM_tt
+" }}}
 
 " Code Completins
 " {{{ plugin/neocomplcache.vim 自动提示插件
