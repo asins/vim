@@ -1,9 +1,9 @@
 " {{{
 " DesCRiption: 适合自己使用的vimrc文件，for Linux/Windows, GUI/Console
-" Last Change: 2013-01-23
+" Last Change: 2013-03-24
 " Author:      Asins - asinsimple AT gmail DOT com
 "              Get latest vimrc from http://nootn.com/lab/vim
-" Version:     3.3
+" Version:     3.4
 "}}}
 
 " 设置leader为,
@@ -126,12 +126,6 @@ Bundle 'python.vim--Vasiliev'
 Bundle 'xml.vim'
 Bundle 'tpope/vim-markdown'
 Bundle 'asins/vim-css'
-
-"{{{ 对齐代码
-Bundle 'Eivy/Align'
-" 原有,tt冲突
-map <Leader>tT <Plug>AM_tt
-" }}}
 
 " Code Completins
 " {{{ plugin/neocomplcache.vim 自动提示插件
@@ -287,6 +281,7 @@ Bundle 'gg/python.vim'
 
 	" {{{ The-NERD-Commenter 注释代码用的，以下映射已写在插件中
 	Bundle 'The-NERD-Commenter'
+	let NERDMenuMode = 0
 	" <leader>ca 在可选的注释方式之间切换，比如C/C++ 的块注释/* */和行注释//
 	" <leader>cc 注释当前行
 	" <leader>cs 以”性感”的方式注释
@@ -444,13 +439,6 @@ vnoremap <c-c> "+y
 " 普通模式下 Ctrl+c 复制文件路径
 nnoremap <c-c> :let @+ = expand('%:p')<cr>
 
-" Alt-Space is System menu
-if has("gui")
-  noremap <m-space> :simalt ~<cr>
-  inoremap <m-space> <c-o>:simalt ~<cr>
-  cnoremap <m-space> <c-c>:simalt ~<cr>
-endif
-
 "set nobomb
 
 if !exists('g:VimrcIsLoad')
@@ -463,7 +451,6 @@ if !exists('g:VimrcIsLoad')
 	set display=lastline
 	language messages zh_CN.UTF-8
 	set langmenu=zh_CN.UTF-8
-	source $VIMRUNTIME/delmenu.vim
 	set guioptions-=m " 隐藏菜单栏
 	set guioptions-=T " 隐藏工具栏
 	set guioptions-=L " 隐藏左侧滚动条
