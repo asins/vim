@@ -110,11 +110,37 @@ endif
 
 ## 更新记录
 
-**Update 2013-03-22** : 这次编译只支持Python3.3、Python2.7，其它的都去除了，用不上，最后补丁为875
+#### Update 2013-03-26
 
-**Update 2012-10-24**：插件管理交给`Vundle`管理了，其中我也改动了几个插件也放在Git中。更新插件时直接`:BundleInstall`就可以了（但修改完后得重启GVIM再执行命令），不用的插件在`_vimrc`中删除后执行`:BundleClean`就可以了。
+修改vim编译文件(src\feature.h)，去除toolbar/menu包。注释掉了所有包括以下字符的行
 
-**Update 2011-11-09**：从git中更新后编译的64位GVIM，支持Python3.2、Python2.7、Perl、TCL/TC应该算是挺全的了，补丁的到353。
+``` vim
+# define FEAT_MENU
+# define FEAT_TOOLBAR
+```
+
+编译完后使用时出现些问题
+
+* 在_vimrc中去掉了`"source $VIMRUNTIME/delmenu.vim`这行。
+* NERD-Commenter插件没有对是否加载了menu包做判断！在vimrc中加入一行`let NERDMenuMode = 0`。
+
+修改vim源码，修复Win下右下角白边bug
+
+* 在`src/gui_w32.c` 文件中第 1516行 `CreateWindowEx` 这个API中的第一个参数  `WS_EX_CLIENTEDGE` 把它改为0。
+* 在`src/gui_w32.c` 文件中第1567行 `gui.border_offset = gui.border_width + 2;` 这个把 +2 去掉。
+* `gvimfullscreen.c`文件中第112行 `SetWindowLong(hTextArea, GWL_EXSTYLE, GetWindowLong(hTextArea, GWL_EXSTYLE) | WS_EX_CLIENTEDGE);` 这行注释掉。
+
+#### Update 2013-03-22
+
+这次编译只支持Python3.3、Python2.7，其它的都去除了，用不上，最后补丁为875
+
+#### Update 2012-10-24
+
+插件管理交给`Vundle`管理了，其中我也改动了几个插件也放在Git中。更新插件时直接`:BundleInstall`就可以了（但修改完后得重启GVIM再执行命令），不用的插件在`_vimrc`中删除后执行`:BundleClean`就可以了。
+
+#### Update 2011-11-09
+
+从git中更新后编译的64位GVIM，支持Python3.2、Python2.7、Perl、TCL/TC应该算是挺全的了，补丁的到353。
 
 修改了一行源码，用于解决GVIM白边的问题，因为我使用的配色为`molokai`，所以给的颜色是黑色的。
 
