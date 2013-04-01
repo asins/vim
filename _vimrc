@@ -10,8 +10,6 @@
 let mapleader=","
 let g:mapleader=","
 let maplocalleader=","
-" 关闭 vi 兼容模式
-set nocompatible
 
 "编辑vim配置文件
 if has("unix")
@@ -24,72 +22,8 @@ else
 	let $VIMFILES = $VIM."/vimfiles"
 endif
 
-" {{{ 全局设置
-" 关闭 vi 兼容模式
-set nocompatible
-" 自动语法高亮
-syntax on
-" 检测文件类型
-filetype on
-" 检测文件类型插件
-filetype plugin on
-" 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set backspace=indent,eol,start
-set whichwrap+=<,>,h,l
-" 显示行号
-set number
-" 上下可视行数
-set scrolloff=6
-" 设定 tab 长度为 4
-set tabstop=4
-" 设置按BackSpace的时候可以一次删除掉4个空格
-set softtabstop=4
-" 设定 << 和 >> 命令移动时的宽度为 4
-set shiftwidth=4
-set smarttab
-set history=1024
-" 不突出显示当前行
-set nocursorline
-" 覆盖文件时不备份
-set nobackup
-" 自动切换当前目录为当前文件所在的目录
-set autochdir
-" 搜索时忽略大小写，但在有一个或以上大写字母时仍大小写敏感
-set ignorecase
-set smartcase
-" 搜索到文件两端时不重新搜索
-set nowrapscan
-" 实时搜索
-set incsearch
-" 搜索时高亮显示被找到的文本
-set hlsearch
-" 关闭错误声音
-set noerrorbells
-set novisualbell
-set t_vb=
-
-"How many tenths of a second to blink
-set mat=2
-" 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set hidden
-" 智能自动缩进
-set smartindent
-"显示括号配对情况
-set showmatch
-
-" 显示Tab符
-set list
-set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
-"启动时不显示 捐赠提示
-set shortmess=atl
-set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
-
-" 设定doc文档目录
-let helptags=$VIMFILES."/doc"
-set helplang=cn
-" }}}
-
 " {{{ plugin for vundle
+filetype off
 " more script see: http://vim-scripts.org/vim/scripts.html
 set rtp+=$VIMFILES/bundle/vundle/
 call vundle#rc()
@@ -127,6 +61,8 @@ Bundle 'xml.vim'
 Bundle 'tpope/vim-markdown'
 Bundle 'asins/vim-css'
 
+Bundle 'kchmck/vim-coffee-script'
+
 "{{{ 对齐代码
 Bundle 'Eivy/Align'
 " 原有,tt冲突
@@ -135,23 +71,25 @@ map <Leader>tT <Plug>AM_tt
 
 " Code Completins
 " {{{ plugin/neocomplcache.vim 自动提示插件
-Bundle 'Shougo/neocomplcache'
-let g:neocomplcache_enable_at_startup=1
-let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
-let g:neocomplcache_enable_smart_case=1
-let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
-set completeopt-=preview
+"Bundle 'Shougo/neocomplcache'
+"let g:neocomplcache_enable_at_startup=1
+"let g:neocomplcache_disable_auto_complete = 1 "禁用自动完成
+"let g:neocomplcache_enable_smart_case=1
+"let g:neocomplcache_min_syntax_length = 3
+"let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+"set completeopt-=preview
 "启用自动代码提示
-nmap <Leader>ne :NeoComplCacheToggle<CR>
-" Define dictionary.
-let g:neocomplcache_dictionary_filetype_lists = {
-	\ 'default' : '',
-	\ 'css' : $VIMFILES.'/dict/css.dic',
-	\ 'php' : $VIMFILES.'/dict/php.dic',
-	\ 'javascript' : $VIMFILES.'/dict/javascript.dic'
-	\ }
+"nmap <Leader>ne :NeoComplCacheToggle<CR>
+"" Define dictionary.
+"let g:neocomplcache_dictionary_filetype_lists = {
+	"\ 'default' : '',
+	"\ 'css' : $VIMFILES.'/dict/css.dic',
+	"\ 'php' : $VIMFILES.'/dict/php.dic',
+	"\ 'javascript' : $VIMFILES.'/dict/javascript.dic'
+	"\ }
+" }}}
 
+" {{{ Snippet
 Bundle "honza/snipmate-snippets"
 Bundle "Shougo/neosnippet"
 let g:neosnippet#snippets_directory=$VIMFILES.'/bundle/snipmate-snippets/snippets'
@@ -160,11 +98,6 @@ imap <C-k> <Plug>(neocomplcache_snippets_force_expand)
 smap <C-k> <Plug>(neocomplcache_snippets_force_expand)
 imap <C-l> <Plug>(neocomplcache_snippets_force_jump)
 smap <C-l> <Plug>(neocomplcache_snippets_force_jump)
-
-" For snippet_complete marker.
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-endif
 " }}}
 
 " {{{ 代码垂直移动
@@ -285,6 +218,12 @@ Bundle 'gg/python.vim'
 	nnoremap <Leader>tt :NERDTree<CR>
 	"}}}
 
+"Bundle 'Shougo/unite.vim'
+"Bundle 'Shougo/vimfiler'
+"let g:vimfiler_as_default_explorer = 1
+
+
+
 	" {{{ The-NERD-Commenter 注释代码用的，以下映射已写在插件中
 	Bundle 'The-NERD-Commenter'
 	let NERDMenuMode = 0
@@ -400,6 +339,70 @@ Bundle 'gg/python.vim'
 	"}}}
 " }}}
 
+" {{{ 全局设置
+" 关闭 vi 兼容模式
+set nocompatible
+" 自动语法高亮
+syntax on
+" 检测文件类型
+filetype on
+" 检测文件类型插件
+filetype plugin on
+" 不设定在插入状态无法用退格键和 Delete 键删除回车符
+set backspace=indent,eol,start
+set whichwrap+=<,>,h,l
+" 显示行号
+set number
+" 上下可视行数
+set scrolloff=6
+" 设定 tab 长度为 4
+set tabstop=4
+" 设置按BackSpace的时候可以一次删除掉4个空格
+set softtabstop=4
+" 设定 << 和 >> 命令移动时的宽度为 4
+set shiftwidth=4
+set smarttab
+set history=1024
+" 不突出显示当前行
+set nocursorline
+" 覆盖文件时不备份
+set nobackup
+" 自动切换当前目录为当前文件所在的目录
+set autochdir
+" 搜索时忽略大小写，但在有一个或以上大写字母时仍大小写敏感
+set ignorecase
+set smartcase
+" 搜索到文件两端时不重新搜索
+set nowrapscan
+" 实时搜索
+set incsearch
+" 搜索时高亮显示被找到的文本
+set hlsearch
+" 关闭错误声音
+set noerrorbells
+set novisualbell
+set t_vb=
+
+"How many tenths of a second to blink
+set mat=2
+" 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
+set hidden
+" 智能自动缩进
+set smartindent
+"显示括号配对情况
+set showmatch
+
+" 显示Tab符
+set list
+set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+"启动时不显示 捐赠提示
+set shortmess=atl
+set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
+
+" 设定doc文档目录
+let helptags=$VIMFILES."/doc"
+set helplang=cn
+" }}}
 
 " {{{ 查找光标位置的单词并生成结果列表
 function! QuickSearchList(visual, ...)
