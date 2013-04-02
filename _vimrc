@@ -1,29 +1,91 @@
 " {{{
-" DesCRiption: 适合自己使用的vimrc文件，for Linux/Windows, GUI/Console
-" Last Change: 2013-03-26
 " Author:      Asins - asinsimple AT gmail DOT com
 "              Get latest vimrc from http://nootn.com/lab/vim
-" Version:     3.4
+" Last Change: 2013-04-02
 "}}}
 
+" {{{ 全局设置
+" 关闭 vi 兼容模式
+set nocompatible
+" 检测文件类型插件
+filetype plugin indent on
 " 设置leader为,
 let mapleader=","
-let g:mapleader=","
 let maplocalleader=","
+
+" 自动运用设置
+autocmd! BufWritePost _vimrc silent source $VIM/_vimrc
+nmap <leader>e :tabedit $MYVIMRC<cr>
+" 允许在有未保存的修改时切换缓冲区
+set hidden
+" 自动语法高亮
+syntax on
+" 不设定在插入状态无法用退格键和 Delete 键删除回车符
+set backspace=indent,eol,start
+set whichwrap+=<,>,h,l
+" 显示行号
+set number
+" 上下可视行数
+set scrolloff=6
+" 设定 tab 长度为 4
+set tabstop=4
+" 设置按BackSpace的时候可以一次删除掉4个空格
+set softtabstop=4
+" 设定 << 和 >> 命令移动时的宽度为 4
+set shiftwidth=4
+set smarttab
+set history=1024
+" 不突出显示当前行
+set nocursorline
+" 覆盖文件时不备份
+set nobackup
+" 自动切换当前目录为当前文件所在的目录
+set autochdir
+" 搜索时忽略大小写，但在有一个或以上大写字母时仍大小写敏感
+set ignorecase
+set smartcase
+" 搜索到文件两端时不重新搜索
+set nowrapscan
+" 实时搜索
+set incsearch
+" 搜索时高亮显示被找到的文本
+set hlsearch
+" 关闭错误声音
+set noerrorbells
+set novisualbell
+set t_vb=
+
+"How many tenths of a second to blink
+set mat=2
+" 智能自动缩进
+set smartindent
+"显示括号配对情况
+set showmatch
+
+" 显示Tab符
+set list
+set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+"启动时不显示 捐赠提示
+set shortmess=atl
+set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
+
+" 设定doc文档目录
+let helptags=$VIMFILES."/doc"
+set helplang=cn
 
 "编辑vim配置文件
 if has("unix")
     set fileformats=unix,dos,mac
-    nmap <leader>e :tabnew $HOME/.vimrc<cr>
 	let $VIMFILES = $HOME."/.vim"
 else
     set fileformats=dos,unix,mac
-    nmap <leader>e :tabnew $VIM/_vimrc<cr>
 	let $VIMFILES = $VIM."/vimfiles"
 endif
 
+" }}}
+
 " {{{ plugin for vundle
-filetype off
+filetype off "必要关闭
 " more script see: http://vim-scripts.org/vim/scripts.html
 set rtp+=$VIMFILES/bundle/vundle/
 call vundle#rc()
@@ -337,71 +399,7 @@ Bundle 'gg/python.vim'
 	" <silent>* 当前MarkWord的下一个     <silent># 当前MarkWord的上一个
 	" <silent>/ 所有MarkWords的下一个    <silent>? 所有MarkWords的上一个
 	"}}}
-" }}}
-
-" {{{ 全局设置
-" 关闭 vi 兼容模式
-set nocompatible
-" 自动语法高亮
-syntax on
-" 检测文件类型
-filetype on
-" 检测文件类型插件
-filetype plugin indent on
-" 不设定在插入状态无法用退格键和 Delete 键删除回车符
-set backspace=indent,eol,start
-set whichwrap+=<,>,h,l
-" 显示行号
-set number
-" 上下可视行数
-set scrolloff=6
-" 设定 tab 长度为 4
-set tabstop=4
-" 设置按BackSpace的时候可以一次删除掉4个空格
-set softtabstop=4
-" 设定 << 和 >> 命令移动时的宽度为 4
-set shiftwidth=4
-set smarttab
-set history=1024
-" 不突出显示当前行
-set nocursorline
-" 覆盖文件时不备份
-set nobackup
-" 自动切换当前目录为当前文件所在的目录
-set autochdir
-" 搜索时忽略大小写，但在有一个或以上大写字母时仍大小写敏感
-set ignorecase
-set smartcase
-" 搜索到文件两端时不重新搜索
-set nowrapscan
-" 实时搜索
-set incsearch
-" 搜索时高亮显示被找到的文本
-set hlsearch
-" 关闭错误声音
-set noerrorbells
-set novisualbell
-set t_vb=
-
-"How many tenths of a second to blink
-set mat=2
-" 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
-set hidden
-" 智能自动缩进
-set smartindent
-"显示括号配对情况
-set showmatch
-
-" 显示Tab符
-set list
-set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
-"启动时不显示 捐赠提示
-set shortmess=atl
-set sessionoptions=blank,buffers,curdir,folds,help,options,tabpages,winsize,slash,unix,resize
-
-" 设定doc文档目录
-let helptags=$VIMFILES."/doc"
-set helplang=cn
+	filetype plugin indent on " 使用vundle关闭，结束时开始
 " }}}
 
 " {{{ 查找光标位置的单词并生成结果列表
@@ -548,8 +546,6 @@ set foldcolumn=0
 set switchbuf=usetab,newtab
 " 新建的文件，刚打开的文件不折叠
 autocmd! BufNewFile,BufRead * setlocal nofoldenable
-" 自动运用设置
-autocmd! bufwritepost _vimrc silent source $VIM/_vimrc
 " }}}
 
 " VimFiles {{{
