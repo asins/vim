@@ -49,6 +49,7 @@ autocmd filetype php setlocal dictionary+=$VIMFILES/bundle/vim-dict/dict/php.dic
 Bundle 'asins/vim-colors'
 Bundle 'tpope/vim-vividchalk'
 Bundle 'chriskempson/vim-tomorrow-theme'
+Bundle 'w0ng/vim-hybrid'
 " 设定配色方案
 colorscheme molokai
 
@@ -61,7 +62,12 @@ Bundle 'xml.vim'
 Bundle 'tpope/vim-markdown'
 Bundle 'asins/vim-css'
 
+" {{{ Coffee相关
+" npm install -g coffee-script coffeelint
 Bundle 'kchmck/vim-coffee-script'
+" 自动生成代码
+autocmd! BufWritePost *.coffee silent CoffeeMake!
+" }}}
 
 "{{{ 对齐代码
 Bundle 'Eivy/Align'
@@ -195,8 +201,8 @@ Bundle 'gg/python.vim'
 	autocmd BufWinEnter \[Buf\ List\] setl nonumber
 	" }}}
 
-	" {{{ The-NERD-tree 文件管理器
-	Bundle 'The-NERD-tree'
+	" {{{ NERDtree 文件管理器
+	Bundle 'scrooloose/nerdtree'
 	" 让Tree把自己给装饰得多姿多彩漂亮点
 	let NERDChristmasTree=1
 	" 控制当光标移动超过一定距离时，是否自动将焦点调整到屏中心
@@ -217,12 +223,6 @@ Bundle 'gg/python.vim'
 	let NERDTreeWinSize=31
 	nnoremap <Leader>tt :NERDTree<CR>
 	"}}}
-
-"Bundle 'Shougo/unite.vim'
-"Bundle 'Shougo/vimfiler'
-"let g:vimfiler_as_default_explorer = 1
-
-
 
 	" {{{ The-NERD-Commenter 注释代码用的，以下映射已写在插件中
 	Bundle 'The-NERD-Commenter'
@@ -318,7 +318,7 @@ Bundle 'gg/python.vim'
 	" % 正向匹配      g% 反向匹配
 	" [% 定位块首     ]% 定位块尾
 	"}}}
-	
+
 	" {{{ MatchTag HTML标签高亮配对
 	Bundle 'MatchTag'
 	" }}}
@@ -347,7 +347,7 @@ syntax on
 " 检测文件类型
 filetype on
 " 检测文件类型插件
-filetype plugin on
+filetype plugin indent on
 " 不设定在插入状态无法用退格键和 Delete 键删除回车符
 set backspace=indent,eol,start
 set whichwrap+=<,>,h,l
@@ -474,15 +474,7 @@ endif
 
 
 " 删除所有行未尾空格
-"function! g:mergeLines() range
-  "let lines = join(map(getline(a:firstline, a:lastline), 'matchstr(v:val, "^\\s*\\zs.*\\ze\\s*$")'), '')
-  "let indent = substitute(getline('.'), '^\(\s*\).*', '\1', '')
-  "silent! exe "normal! gvc"
-  "call setline('.', indent . lines)
-"endfunction
-"vnoremap <f12> :call g:mergeLines()<cr>
 nnoremap <silent> <f12> :%s/[ \t\r]\+$//g<cr>
-" :%s/[ \t\r]\+$//g<cr>
 
 " 窗口切换
 nnoremap <c-h> <c-w>h
@@ -587,9 +579,6 @@ autocmd BufRead,BufNewFile *.json setlocal ft=json
 " Markdown {{{
 autocmd FileType markdown setf expandtab
 " }}}
-
-" PHP Twig 模板引擎语法
-autocmd BufRead,BufNewFile *.twig set syntax=twig
 
 " Python 文件的一般设置，比如不要 tab 等
 "autocmd FileType python set tabstop=4 shiftwidth=4 expandtab
