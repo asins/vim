@@ -110,6 +110,17 @@ endif
 
 ## 更新记录
 
+### Update 2014-07-04
+
+ - 加入CtrlP插件用于在项目中查找文件等功能
+ - 删除 bufexplorer.vim 使用CtrlP的:CtrlPBuffer
+ - 删除 mra.vim 使用CtrlP的:CtrlPMRU
+ - 替换原有Mark插件 解决source _vimrc标记颜色丢失问题，相应快捷键也更新了
+ - 用airline替换powerline，运行速度更快
+ - 删除neocomplete中对默认字典的定义解决无法提示字典词的问题
+
+现在开始使用OS X系统，所以有些设置做了微调以解决与系统默认设置冲突的问题。
+
 #### Update 2013-03-26
 
 修改vim编译文件(src\feature.h)，去除toolbar/menu包。注释掉了所有包括以下字符的行
