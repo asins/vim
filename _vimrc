@@ -312,6 +312,12 @@ hi MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
 hi MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
 hi MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
 hi MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
+
+nmap <silent> <Leader>hl <plug>MarkSet
+vmap <silent> <Leader>hl <plug>MarkSet
+nmap <silent> <Leader>hh <plug>MarkClear
+nmap <silent> <Leader>hr <plug>MarkRegex
+vmap <silent> <Leader>hr <plug>MarkRegex
 " }}}
 
 " vim-airline {{{
