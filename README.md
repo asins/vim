@@ -11,47 +11,48 @@ nmake -f Make_mvc.mak GUI=yes FEATURES=HUGE MBYTE=yes IME=yes GIME=yes DYNAMIC_I
 我的VIM插件完全使用`Vundle`进行管理。
 
 ``` vim
-Bundle 'gmarik/vundle'
-Bundle 'asins/vimcdoc'
-Bundle 'asins/vim-dict'
-Bundle 'asins/vim-colors'
-Bundle 'tpope/vim-vividchalk'
-Bundle 'chriskempson/vim-tomorrow-theme'
-Bundle 'othree/html5.vim'
-Bundle 'nono/jquery.vim'
-Bundle 'pangloss/vim-javascript'
-Bundle 'python.vim--Vasiliev'
-Bundle 'xml.vim'
-Bundle 'tpope/vim-markdown'
-Bundle 'lepture/vim-css'
-Bundle 'Shougo/neocomplcache'
-Bundle 'honza/snipmate-snippets'
-Bundle 'Shougo/neosnippet'
-Bundle 'vim-scripts/upAndDown'
-Bundle 'tpope/vim-ragtag'
-Bundle 'ZenCoding.vim'
-Bundle 'groenewege/vim-less'
-Bundle 'IndentAnything'
-Bundle 'Javascript-Indentation'
-Bundle 'gg/python.vim'
-Bundle 'teramako/jscomplete-vim'
-Bundle 'asins/template.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'vim-scripts/bufexplorer.zip'
-Bundle 'The-NERD-tree'
-Bundle 'The-NERD-Commenter'
-Bundle 'auto_mkdir'
-Bundle 'mru.vim'
-Bundle 'majutsushi/tagbar'
-Bundle 'CmdlineComplete'
-Bundle 'colorizer'
-Bundle 'asins/jsbeautify'
-Bundle 'asins/renamer.vim'
-Bundle 'mikeage/ShowMarks'
-Bundle 'ctrlp.vim'
-Bundle 'matchit.zip'
-Bundle 'MatchTag'
-Bundle 'Mark'
+Plugin 'gmarik/Vundle.vim'
+
+"Color
+Plugin 'asins/vim-colors'
+
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-fugitive'
+Plugin 'bling/vim-airline'
+Plugin 'kien/ctrlp.vim'
+Plugin 'tacahiroy/ctrlp-funky'
+Plugin 'jrhorn424/vim-multiple-cursors'
+
+Plugin 'asins/vimcdoc'
+Plugin 'asins/vim-dict'
+
+Plugin 'Shougo/vimshell.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'asins/renamer.vim'
+Plugin 'auto_mkdir'
+
+" Syntax
+Plugin 'othree/html5.vim'
+Plugin 'othree/html5-syntax.vim'
+Plugin 'hallison/vim-markdown'
+Plugin 'pangloss/vim-javascript'
+Plugin 'nono/jquery.vim'
+Plugin 'groenewege/vim-less'
+
+" Indent
+Plugin 'IndentAnything'
+Plugin 'jiangmiao/simple-javascript-indenter'
+
+
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'asins/mark'
+
+" HTML tools
+Plugin 'mattn/emmet-vim'
+Plugin 'tpope/vim-ragtag'
+Plugin 'matchit.zip' " 通过%跳转配对代码
+Plugin 'MatchTag' " HTML标签高亮配对
+Plugin 'maksimr/vim-jsbeautify' "HTML/CSS/JS代码格式化
 ```
 
 ## 特殊的dll文件
