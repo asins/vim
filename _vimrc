@@ -7,6 +7,9 @@ filetype off                   " required!
 let mapleader=","
 let maplocalleader=","
 
+" 删除原有自动命令，防止.vimrc执行多次时自动命令出现多次
+autocmd!
+
 "编辑vim配置文件
 if has("unix")
 	set fileformats=unix,mac,dos
@@ -194,7 +197,7 @@ endif
 " zN 启用折叠
 
 " 新建的文件，刚打开的文件不折叠
-autocmd! BufNewFile,BufRead * setlocal nofoldenable list
+autocmd BufNewFile,BufRead * setlocal nofoldenable list
 
 " Filetype
 autocmd BufRead,BufNewFile *.json set filetype=json
@@ -398,7 +401,7 @@ nnoremap <C-P> :CtrlP<Space>
 nmap <Leader>e :tabedit $MYVIMRC<CR>
 
 " 自动运用设置
-autocmd! BufWritePost .vimrc,.gvimrc,_vimrc silent source %
+autocmd BufWritePost .vimrc,.gvimrc,_vimrc silent source %
 
 " 窗口切换
 nnoremap <c-h> <c-w>h
