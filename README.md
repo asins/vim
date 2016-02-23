@@ -111,6 +111,13 @@ endif
 
 ## 更新记录
 
+### Update 2016-02-23
+
+重新编写，改善了编辑`.vimrc`时多次渲染闪烁以及颜色丢失问题
+
+大量参照[https://github.com/Firef0x/vimfiles.git]()的编写风格以及配置，感谢
+
+
 ### Update 2014-07-04
 
  - 加入CtrlP插件用于在项目中查找文件等功能
