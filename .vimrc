@@ -368,8 +368,8 @@ Plug 'tpope/vim-markdown', { 'for': [ 'markdown' ] }
 "   代码检查 & 代码提示 & 文档查询 {{{2
 " 自动完成 需要lua支持
 Plug 'Shougo/neocomplete.vim'
-" JavaScript的语义分析提示 需到目录中执行cnpm install
-Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': '!cnpm install'}
+" JavaScript的语义分析提示 需到目录中执行npm install 使用阿里中国仓库加快安装速度
+Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': ''npm install --registry=https://registry.npm.taobao.org''}
 " 包含很多语言的语法与编码风格检查插件
 Plug 'scrooloose/syntastic', { 'for': ['php', 'javascript', 'css', 'less', 'scss'] }
 " Vim 中文文档计划
