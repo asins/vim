@@ -8,56 +8,11 @@ nmake -f Make_mvc.mak GUI=yes FEATURES=HUGE MBYTE=yes IME=yes GIME=yes DYNAMIC_I
 
 ## 插件列表
 
-我的VIM插件完全使用`Vundle`进行管理。
-
-``` vim
-Plugin 'gmarik/Vundle.vim'
-
-"Color
-Plugin 'asins/vim-colors'
-
-Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-fugitive'
-Plugin 'bling/vim-airline'
-Plugin 'kien/ctrlp.vim'
-Plugin 'tacahiroy/ctrlp-funky'
-Plugin 'jrhorn424/vim-multiple-cursors'
-
-Plugin 'asins/vimcdoc'
-Plugin 'asins/vim-dict'
-
-Plugin 'Shougo/vimshell.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'asins/renamer.vim'
-Plugin 'auto_mkdir'
-
-" Syntax
-Plugin 'othree/html5.vim'
-Plugin 'othree/html5-syntax.vim'
-Plugin 'hallison/vim-markdown'
-Plugin 'pangloss/vim-javascript'
-Plugin 'nono/jquery.vim'
-Plugin 'groenewege/vim-less'
-
-" Indent
-Plugin 'IndentAnything'
-Plugin 'jiangmiao/simple-javascript-indenter'
-
-
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'asins/mark'
-
-" HTML tools
-Plugin 'mattn/emmet-vim'
-Plugin 'tpope/vim-ragtag'
-Plugin 'matchit.zip' " 通过%跳转配对代码
-Plugin 'MatchTag' " HTML标签高亮配对
-Plugin 'maksimr/vim-jsbeautify' "HTML/CSS/JS代码格式化
-```
+VIM插件使用~~Vundle~~ `Plug`（运行并行更新）进行管理，具体使用的插件列表请看[.vimrc](.vimrc)。
 
 ## 特殊的dll文件
 
-  - gvimext.dll是修改过后的，功能简化了，当选择单个文件时右键菜单只会出现一个 "Edit with VIM"，当选择多个文件同时会多出个"Diff with VIM"，同时加入了图标。
+  - ~~gvimext.dll是修改过后的，功能简化了，当选择单个文件时右键菜单只会出现一个 "Edit with VIM"，当选择多个文件同时会多出个"Diff with VIM"，同时加入了图标。~~，已习惯去除VIM菜单方式，当然`gvimext.dll`文件还是保存但不再更新。
   - gvimfullscreen.dll是个相当全的东西，能让VIM全屏、透明、总在最前功能，在vimrc中设置如下则可使用，重的修改是去除Gvim的白边！[源代码](http://github.com/asins/gvimfullscreen_win32)可到这里找到。
 
 ``` vim
