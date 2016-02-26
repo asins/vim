@@ -1,6 +1,6 @@
 " Author: Asins - asinsimple AT gmail DOT com
 "         Get latest vimrc from http://nootn.com/
-" Last Modified: 2016-02-22 17:34 (+0800)
+" Last Modified: 2016-02-26 10:30 (+0800)
 
 " 准备工作 {{{1
 " 判定语句及定义变量
@@ -36,18 +36,10 @@ else
 endif
 "   }}}
 "   判定当前是否有 CTags {{{2
-if executable('ctags')
-	let s:hasCTags=1
-else
-	let s:hasCTags=0
-endif
+let s:hasCTags=executable('ctags')
 "   }}}
-"   判定当前终端是否 Tmux {{{2
-if exists('$TMUX')
-	let s:isTmux=1
-else
-	let s:isTmux=0
-endif
+"   判定当前是否有 Ag {{{2
+let s:hasAg=executable('ag')
 "   }}}
 " 设置自动命令组
 "   特定文件类型自动命令组 {{{2
@@ -237,9 +229,9 @@ if s:hasCTags
 	" 提供单个源代码文件的函数列表之类的功能，强于 Taglist
 	Plug 'majutsushi/tagbar'
 endif
-" NERDTree -- 树形的文件系统浏览器（替代 Netrw)，功能比 Vim 自带的 Netrw 强大
+" 树形的文件系统浏览器（替代 Netrw)，功能比 Vim 自带的 Netrw 强大
 Plug 'scrooloose/nerdtree'
-" NERDTree的Git支持
+" NERDTree的Git显示支持
 Plug 'Xuyuanp/nerdtree-git-plugin'
 " 模糊文件查找
 Plug 'ctrlpvim/ctrlp.vim'
@@ -247,8 +239,6 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tacahiroy/ctrlp-funky'
 " 在 Visual 模式下使用 */# 跳转
 Plug 'thinca/vim-visualstar'
-" 使用Perl风格正则
-Plug 'othree/eregex.vim'
 " }}}
 "   系统支持 {{{2
 " 文件重命令 使用说明 {{{3
@@ -276,8 +266,11 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'mattn/emmet-vim', { 'for': [ 'css', 'html', 'less', 'sass', 'scss', 'xml', 'xsd', 'xsl', 'xslt', 'mustache' ] }
 " 高亮显示光标处配对的HTML标签
 Plug 'MatchTag', { 'for': [ 'html', 'xml' ] }
-" 比较指定文本块
-Plug 'AndrewRadev/linediff.vim' " , { 'on': [ 'Linediff', 'LinediffReset' ] }
+" 比较指定文本块 使用说明 {{{3
+" :Linediff 设置对比块，两次后会开启vimDiff模式
+" :LinediffReset 清除Diff标记
+" }}}
+Plug 'AndrewRadev/linediff.vim' , { 'on': [ 'Linediff', 'LinediffReset' ] }
 " 专注编辑选定区域 使用说明 {{{3
 " <Leader>nr       - 将当前选中内容在一个缩小的窗口中打开
 " }}}
@@ -299,10 +292,10 @@ Plug 'chrisbra/NrrwRgn'
 " 件定义的highlight组加入到你自己的colorscheme文件中。
 " }}}
 Plug 'dimasg/vim-mark'
-" tabular 比 Align 更简单，所以替换
-Plug 'godlygeek/tabular' " , { 'on': [ 'Tabularize', 'AddTabularPipeline' ] }
-" 中文排版自动规范化 'on': [ 'Pangu', 'PanguEnable', 'PanguDisable' ],
-Plug 'hotoo/pangu.vim', { 'for': [ 'markdown', 'text' ] }
+" 文本对齐 tabular 比 Align 更简单
+Plug 'godlygeek/tabular' , { 'on': [ 'Tabularize', 'AddTabularPipeline' ] }
+" 中文排版自动规范化
+Plug 'hotoo/pangu.vim', { 'on': [ 'Pangu', 'PanguEnable', 'PanguDisable' ], 'for': [ 'markdown', 'text' ] }
 " Node功能
 Plug 'moll/vim-node', { 'for': [ 'javascript' ] }
 
@@ -339,7 +332,7 @@ Plug 'scrooloose/nerdcommenter'
 " gS 分隔一个单行代码为多行
 " gJ (光标在区块的第一行) 将区块合并为单行
 " }}}
-Plug 'AndrewRadev/splitjoin.vim' " , { 'on': [ 'SplitjoinJoin', 'SplitjoinSplit' ] }
+Plug 'AndrewRadev/splitjoin.vim' , { 'on': [ 'SplitjoinJoin', 'SplitjoinSplit' ] }
 " html/css/js 代码格式化 需要NodeJs的支持
 if executable('node') || executable('nodejs')
 	Plug 'maksimr/vim-jsbeautify',  { 'for': [ 'css', 'html', 'javascript', 'json', 'less', 'mustache' ] }
@@ -369,7 +362,7 @@ Plug 'tpope/vim-markdown', { 'for': [ 'markdown' ] }
 " 自动完成 需要lua支持
 Plug 'Shougo/neocomplete.vim'
 " JavaScript的语义分析提示 需到目录中执行npm install 使用阿里中国仓库加快安装速度
-Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': ''npm install --registry=https://registry.npm.taobao.org''}
+Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': 'npm install --registry=https://registry.npm.taobao.org'}
 " 包含很多语言的语法与编码风格检查插件
 Plug 'scrooloose/syntastic', { 'for': ['php', 'javascript', 'css', 'less', 'scss'] }
 " Vim 中文文档计划
@@ -538,6 +531,12 @@ set title
 " shaping (which is implemented poorly).
 if has('arabic')
 	set noarabicshape
+endif
+"   }}}
+"   Ag 程序参数及输出格式选项 {{{2
+if s:hasAg
+	set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ --ignore\ '.hg'\ --ignore\ '.svn'\ --ignore\ '.git'\ --ignore\ '.bzr'
+	set grepformat=%f:%l:%c:%m
 endif
 "   }}}
 "   关闭错误声音 {{{2
@@ -834,13 +833,20 @@ let g:ctrlp_custom_ignore = {
 			\ 'dir':  '\v[\/]\.(git|hg|svn|cache|Trash|.)',
 			\ 'file': '\v\.(log|jpg|png|jpeg|exe|so|dll|pyc|pyo|swf|swp|psd|db|DS_Store)$'
 			\ }
-let g:ctrlp_user_command = {
+if s:hasAg
+	let g:ctrlp_user_command = 'ag --nogroup --column --smart-case --nocolor --follow --ignore "\.(git|hg|svn|bzr)$"'
+	" ag is fast enough that CtrlP doesn't need to cache
+	let g:ctrlp_use_caching = 0
+else
+	let g:ctrlp_custom_ignore = '\.(git|hg|svn|bzr)$'
+	let g:ctrlp_user_command = {
 			\ 'types': {
 				\ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
 				\ 2: ['.hg', 'hg --cwd %s locate -I .'],
 			\ },
 			\ 'fallback': 'find %s -type f'
 		\ }
+endif
 let g:ctrlp_extensions = ['funky', 'tag', 'buffertag', 'quickfix', 'dir', 'rtscript', 'mixed']
 
 let g:ctrlp_funky_syntax_highlight = 1
@@ -1022,20 +1028,12 @@ nmap <silent> <Leader>hh <plug>MarkAllClear
 nmap <silent> <Leader>hr <plug>MarkRegex
 vmap <silent> <Leader>hr <plug>MarkRegex
 "  默认高亮配色 注意：urce后Mark会被覆盖
-augroup MyAutoCmd
-	autocmd ColorScheme * highlight def MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
-	autocmd ColorScheme * highlight def MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
-	autocmd ColorScheme * highlight def MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
-	autocmd ColorScheme * highlight def MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
-	autocmd ColorScheme * highlight def MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
-	autocmd ColorScheme * highlight def MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
-augroup END
-"   }}}
-"   eregex.vim {{{2
-nnoremap / /\v
-nnoremap ? :M/
-nnoremap <leader>vf :M/<c-r><c-w>
-nnoremap <leader>vr :.,$S///gec<left><left><left><left><left>
+highlight MarkWord1  ctermbg=Cyan     ctermfg=Black  guibg=#8CCBEA    guifg=Black
+highlight MarkWord2  ctermbg=Green    ctermfg=Black  guibg=#A4E57E    guifg=Black
+highlight MarkWord3  ctermbg=Yellow   ctermfg=Black  guibg=#FFDB72    guifg=Black
+highlight MarkWord4  ctermbg=Red      ctermfg=Black  guibg=#FF7272    guifg=Black
+highlight MarkWord5  ctermbg=Magenta  ctermfg=Black  guibg=#FFB3FF    guifg=Black
+highlight MarkWord6  ctermbg=Blue     ctermfg=Black  guibg=#9999FF    guifg=Black
 "   }}}
 " }}}
 " 自动命令 {{{1
@@ -1069,12 +1067,10 @@ augroup Filetype_Specific
 "     }}}
 "     文本文件{{{3
 	" pangu.vim
-	autocmd BufWritePre *.markdown,*.md,*.text,*.txt,*.wiki,*.cnx call PanGuSpacing()
+	autocmd BufWritePre *.markdown,*.md,*.text,*.txt call PanGuSpacing()
 "     }}}
 "     Quickfix {{{3
 	autocmd FileType qf call AdjustWindowHeight(3, 50)
-"     }}}
-"     dict {{{3
 "     }}}
 "     JavaScript {{{3
 "     }}}
@@ -1083,7 +1079,7 @@ augroup END
 "   默认自动命令组 {{{2
 augroup MyAutoCmd
 "     [Disable] 新建的文件，刚打开的文件不折叠 {{{3
-	" autocmd BufNewFile,BufRead * setlocal nofoldenable list
+	autocmd BufNewFile,BufRead * setlocal nofoldenable
 "     }}}
 "     当打开一个新缓冲区时，自动切换目录为当前编辑文件所在目录 {{{3
 	autocmd BufEnter,BufNewFile,BufRead *
@@ -1094,8 +1090,8 @@ augroup MyAutoCmd
 	" 所有文件保存时自动删除多余空格 {{{3
 	autocmd BufWritePre * call StripTrailingWhitespace()
 "     }}}
-"     [Disable] 自动更新Last Modified {{{3
-	" autocmd BufWritePre * call <SID>UpdateLastMod()
+"     自动更新Last Modified {{{3
+	autocmd BufWritePre * call <SID>UpdateLastMod()
 "     }}}
 "     保存 Vim 配置文件后自动加载 {{{3
 	" 加载完之后需要执行 AirlineRefresh 来刷新，否则 tabline 排版会乱
@@ -1197,6 +1193,9 @@ nmap <silent> <Leader>ur :call OpenURL()<CR>
 "   }}}
 "   切换绝对/相对行号 <Leader>nu {{{2
 nnoremap <Leader>nu :<C-U>call ToggleOption('rnu')<CR>
+"   }}}
+"   使用Perl风格正则 {{{2
+nnoremap / /\v
 "   }}}
 " }}}
 
