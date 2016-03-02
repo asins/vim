@@ -1,6 +1,6 @@
 " Author: Asins - asinsimple AT gmail DOT com
 "         Get latest vimrc from http://nootn.com/
-" Last Modified: 2016-02-26 10:30 (+0800)
+" Last Modified: 2016-03-03 01:36 (+0800)
 
 " 准备工作 {{{1
 " 判定语句及定义变量
@@ -213,6 +213,12 @@ endif
 call plug#begin('~/.vim/plugged')
 "   }}}
 "   核心插件 {{{2
+" 全局文内搜索
+if s:hasAg
+	Plug 'rking/ag.vim'
+" :Ag [options] pattern [directory]
+" :Ag FooBar foo/**/*.py 等同于 :Ag -G foo/.*/[^/]*\.py$ FooBar
+endif
 " vim-airline 是更轻巧的 vim-powerline 代替品
 Plug 'bling/vim-airline'
 " MatchIt 对%命令进行扩展使得能在嵌套标签和语句之间跳转 % g% [% ]% 使用说明 {{{3
@@ -259,6 +265,8 @@ endif
 Plug 'ConradIrwin/vim-bracketed-paste'
 "   }}}
 "   文本编辑 {{{2
+" 快速打开子文件
+Plug 'asins/OpenRequireFile.vim'
 " HTML代码快速生成 使用说明 {{{3
 " 常用命令可看：http://nootn.com/blog/Tool/23/
 " <c-y>m  合并多行
@@ -439,7 +447,6 @@ if !exists('g:VimrcIsLoad')
 		" 有些终端不能改变大小
 		set columns=88
 		set lines=32
-		set number
 		set cursorline
 		" 原为double，为了更好地显示airline，改为single
 		set ambiwidth=single
@@ -467,7 +474,6 @@ if !exists('g:VimrcIsLoad')
 			endif
 			if &term == "fbterm"
 				set cursorline
-				set number
 				exe 'colorscheme' colorscheme
 			elseif $TERMCAP =~ 'Co#256'
 				set t_Co=256
@@ -546,13 +552,14 @@ set noerrorbells
 set visualbell t_vb=
 "    }}}
 "   设置文字编辑选项 {{{2
-" set number   " 显示行号
+set number   " 显示行号
 set smartindent " 智能自动缩进
 set cmdheight=1 " 设定命令行的行数为 1
 set showmatch " 显示括号配对情况
 " set nowrap "不自动换行
 syntax on " 自动语法高亮
 set wildmenu " Vim自身命令行模式智能补全
+set wildmode=full
 set background=dark "背景使用黑色，开启molokai终端配色必须指令
 set confirm " 在处理未保存或只读文件的时候，弹出确认
 set noexpandtab  "键入Tab时不转换成空格
@@ -668,6 +675,21 @@ set foldcolumn=0
 " }}}
 
 " 插件设置及其映射 {{{1
+"   OpenRequireFile.vim {{{2
+let g:OpenRequireFile_By_Map = [
+	\ $HOME.'/Git/static_v3/src/js',
+	\ $HOME.'/Git/static_v3/src/css'
+	\ ]
+" nmap <silent> <Leader>gf :call OpenRequireFile()<cr>
+"   }}}
+"   ag.vim {{{2
+if s:hasAg
+	let g:ag_prg="ag --vimgrep"
+	let g:ag_working_path_mode="r"
+" :Ag [options] pattern [directory]
+" :Ag FooBar foo/**/*.py 等同于 :Ag -G foo/.*/[^/]*\.py$ FooBar
+endif
+"   }}}
 "   vim-surround {{{2
 " let g:surround_no_mappings = 1
 " " original
@@ -736,14 +758,6 @@ if s:hasCTags
 	" let tagbar_left = 1
 	let tagbar_width = 30
 	let tagbar_singleclick = 1
-	" let g:tagbar_type_dosini = {
-	" 			\ 'ctagstype': 'ini',
-	" 			\ 'kinds': ['s:sections', 'b:blocks'],
-	" 			\ }
-	let g:tagbar_type_pgsql = {
-				\ 'ctagstype': 'pgsql',
-				\ 'kinds': ['f:functions', 't:tables'],
-				\ }
 	augroup Filetype_Specific
 		" autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx,*.ini call tagbar#autoopen()
 		autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
@@ -1207,88 +1221,6 @@ nnoremap / /\v
 
 
 " ===== 工作环境配制 =====
-" {{{ TUDOU 打开项目中的文件
-function! GetOsPortUrl(url) " 格式化地址分隔线
-	if has("unix") || has('mac')
-		let extra = ':p:gs?\\?/?'
-	else
-		let extra = ':p:gs?/?\\?'
-	end
-	return fnamemodify(a:url, extra)
-endfunction
-" 获取项目目录
-function! GetProjectPath(path, filename)
-	let path = fnamemodify(a:path, ':p:h')
-	let path = findfile(a:filename, '.;')
-	if(path == '')
-		echo 'Not find project directory.'
-	endif
-	return fnamemodify(path, ':h')
-endfunction
-" 打开@import 'xx/oo.less' 'xxx/oo'(less形式) 'xx/oo.css'
-function! GetLessImportFile()
-	let prefpath = GetProjectPath('%', 'tpm-config.js').'\src\css\'
-	let filePath = substitute(getline('.'), '@import\s\+"\([^"]\+\)";\?', '\1', '')
-	if strridx(filePath, './') == 0 " 相对引入
-		let fullPath = expand('%:p:h') . substitute(filePath, '^\.', '', '')
-	else " 绝对引入
-		let fullPath = prefpath . filePath
-	endif
-	let fullPath = GetOsPortUrl(fullPath)
-	let fullPath = substitute(fullPath, '\/$', '', '')
-	if fnamemodify(fullPath, ':e') == ''
-		let fullPath = fullPath . '.less'
-	endif
-	execute ":e " fullPath
-	if findfile(fullPath) == ""
-		echo 'File not exist, Create now: '. fullPath
-	endif
-endfunction
-" 打开Require 引入的JS文件  './xxx'   'model/xxx' 'ooo/xxx.js' '../model/xxx'
-function! GetRequireFile()
-	let prefpath = GetProjectPath('%', 'tpm-config.js').'\src\js\'
-	let filePath = GetFilePath()
-	if strridx(filePath, './') != -1 " 相对引入
-		let fullPath = expand('%:p:h') . '/' . filePath
-	else " 绝对引入
-		let fullPath = prefpath . filePath
-	endif
-	let fullPath = GetOsPortUrl(fullPath)
-	let fullPath = substitute(fullPath, '\/$', '', '')
-	if fnamemodify(fullPath, ':e') == ''
-		let fullPath = fullPath . '.js'
-	endif
-
-	execute ":e " fullPath
-	if findfile(fullPath) == ""
-		echo 'File not exist, Create now: '. fullPath
-	endif
-endfunction
-function! GetFilePath()
-	let line = substitute(expand('<cWORD>'), "'", '"', "g")
-	let mlist = matchlist(line, '.*\"\(.\+\)\".*')
-	if len(mlist) > 0
-		return mlist[1]
-	else
-		let line = substitute(getline('.'), "'", '"', "g")
-		let mlist = matchlist(line, '.*\"\(.\+\)\".*')
-		if len(mlist) > 0
-			return mlist[1]
-		endif
-	endif
-	return ''
-endfunction
-function! OpenRequireFile()
-	if strridx(getline('.'), '@import') >= 0
-		call GetLessImportFile()
-	else
-		call GetRequireFile()
-	endif
-endfunction
-nmap <silent> <Leader>gf :call OpenRequireFile()<cr>
-
-" }}}
-
 " Less to css   need npm install less -g {{{
 function! LessToCss()
 	let current_file = expand('%:p')
@@ -1309,5 +1241,5 @@ else
 endif
 " }}}
 "   Vim Modeline: {{{2
-" vim:fdm=marker:fmr={{{,}}}
+" vim: fdm=marker fmr={{{,}}}  foldcolumn=1
 " }}}
