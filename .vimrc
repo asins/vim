@@ -1,6 +1,6 @@
 " Author: Asins - asinsimple AT gmail DOT com
 "         Get latest vimrc from http://nootn.com/
-" Last Modified: 2016-03-03 01:36 (+0800)
+" Last Modified: 2016-03-09 14:06 (+0800)
 
 " 准备工作 {{{1
 " 判定语句及定义变量
@@ -36,10 +36,18 @@ else
 endif
 "   }}}
 "   判定当前是否有 CTags {{{2
-let s:hasCTags=executable('ctags')
+if executable('ctags')
+	let s:hasCTags=1
+else
+	let s:hasCTags=0
+endif
 "   }}}
 "   判定当前是否有 Ag {{{2
-let s:hasAg=executable('ag')
+if executable('ag')
+	let s:hasAg=1
+else
+	let s:hasAg=0
+endif
 "   }}}
 " 设置自动命令组
 "   特定文件类型自动命令组 {{{2
@@ -737,7 +745,7 @@ let NERDTreeChDirMode = 2
 " NERDTree 替代 Netrw 插件来浏览本地目录
 let NERDTreeHijackNetrw = 0
 " 排除 . .. 文件
-let NERDTreeIgnore = [ '__pycache__', '\.DS_Store', '\.bzr', '\.class', '\.git', '\.hg', '\.idea', '\.pyc', '\.pyo', '\.rvm', '\.sass-cache', '\.svn', '\.swo$', '\.swp$', 'node_modules', '^\.$', '^\.\.$' ]
+let NERDTreeIgnore = [ '__pycache__', '\.DS_Store', '\.bzr', '\.class', '\.git', '\.hg', '\.idea', '\.pyc', '\.pyo', '\.rvm', '\.sass-cache', '\.svn', '\.swo$', '\.swp$', '^\.$', '^\.\.$' ]
 " 指定鼠标模式(1.双击打开 2.单目录双文件 3.单击打开)
 let NERDTreeMouseMode = 2
 " 打开文件后关闭树窗口
@@ -844,11 +852,12 @@ let g:ctrlp_working_path_mode = 'ra'
 " 设置缓存目录
 let g:ctrlp_cache_dir = s:get_cache_dir("ctrlp")
 let g:ctrlp_custom_ignore = {
-			\ 'dir':  '\v[\/]\.(git|hg|svn|cache|Trash|.)',
+			\ 'dir':  '\v[\/]\.(git|hg|svn|cache|Trash)',
 			\ 'file': '\v\.(log|jpg|png|jpeg|exe|so|dll|pyc|pyo|swf|swp|psd|db|DS_Store)$'
 			\ }
 if s:hasAg
-	let g:ctrlp_user_command = 'ag --nogroup --column --smart-case --nocolor --follow --ignore "\.(git|hg|svn|bzr)$"'
+	let g:ctrlp_user_command = 'ag %s -l --nogroup --column --smart-case --nocolor --follow --ignore "\.(git|hg|svn|bzr)$"'
+
 	" ag is fast enough that CtrlP doesn't need to cache
 	let g:ctrlp_use_caching = 0
 else
